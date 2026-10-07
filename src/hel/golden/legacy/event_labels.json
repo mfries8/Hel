@@ -1,0 +1,19 @@
+{
+  "event_id": "Quinault",
+  "luminous_end": {
+    "lat": 47.352392929039134,
+    "lon": -124.53060349250633,
+    "altitude_m": 42165.183238623984,
+    "speed_mps": 3000.00000554735,
+    "azimuth_deg": 309.9999618944019,
+    "declination_deg": 25.610041286146814,
+    "time_utc": "2018-03-08T03:05:21"
+  },
+  "Meteorite Density (kg/m^3)": 2318.3545333431266,
+  "Dielectric Factor (|K|^2)": 0.44,
+  "Meteorite Shape Factor": 1.5,
+  "%Mass Lost in Fireball": 95.0,
+  "Pre-Atmospheric Mass (kg)": 1000.0,
+  "Cosmic Velocity (km/s)": 14.0,
+  "Toughness Index": 189.17015218469126
+}

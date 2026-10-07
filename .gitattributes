@@ -1,0 +1,13 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary
+*.nc binary
+*.h5 binary
+*.kmz binary
+
+
+# Golden files are compared byte for byte by the upgrader tests.
+src/hel/golden/** -text

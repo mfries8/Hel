@@ -1,0 +1,12 @@
+{
+  "event_id": "SM_2012",
+  "luminous_end": {
+    "time_utc": "2012-04-22T14:51:17",
+    "lat": 38.7572,
+    "lon": -120.8609,
+    "altitude_m": 30100.0,
+    "speed_mps": 3000.0,
+    "azimuth_deg": 272.5,
+    "declination_deg": 26.3
+  }
+}

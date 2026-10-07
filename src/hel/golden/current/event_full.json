@@ -1,0 +1,44 @@
+{
+  "contract": "hel.event",
+  "contract_version": "1.0",
+  "event_id": "ExampleFull",
+  "luminous_end": {
+    "time_utc": "2003-03-27T05:50:26.4Z",
+    "lat": 41.46,
+    "lon": -87.73,
+    "altitude_m": 18000.0,
+    "terminus_speed_mps": 3000.0,
+    "azimuth_deg": 21.0,
+    "declination_deg": 61.0
+  },
+  "luminous_start": {
+    "time_utc": "2003-03-27T05:50:22.0Z",
+    "lat": 41.13,
+    "lon": -87.9,
+    "altitude_m": 82000.0,
+    "entry_speed_mps": 19500.0,
+    "azimuth_deg": 21.0,
+    "declination_deg": 61.0
+  },
+  "luminous_trajectory": [
+    {"time_utc": "2003-03-27T05:50:22.0Z", "lat": 41.13, "lon": -87.9, "altitude_m": 82000.0, "speed_mps": 19500.0},
+    {"time_utc": "2003-03-27T05:50:26.4Z", "lat": 41.46, "lon": -87.73, "altitude_m": 18000.0}
+  ],
+  "entry_speed_mps": 19500.0,
+  "meteorite_properties": {
+    "density_kg_m3": 3360.0,
+    "density_mode": "literature",
+    "k2_factor": 0.44,
+    "shape_factor": 1.5,
+    "pre_atmospheric_mass_kg": 11000.0,
+    "solved_density_kg_m3": 3403.0,
+    "toughness_index": 150.0
+  },
+  "mass_lost_pct": 95.0,
+  "radar_duration_s": 469.0,
+  "radar_duration_nexrad_s": 469.0,
+  "tnt_equivalent_kt": 0.5,
+  "finds": [
+    {"lat": 41.421572, "lon": -87.598824, "mass_kg": 0.025}
+  ]
+}

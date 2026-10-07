@@ -1,0 +1,59 @@
+# Hel CI (Fenrir D12, D12a). Every job runs tools/run_ci.py, the same
+# script used locally, so CI and local checks can't drift apart.
+#
+# While the repository is private, Linux runs on every push; Windows runs on
+# pull requests and nightly (the nightly run also covers direct pushes to
+# main) to stay within the free Actions minutes. If the repository goes
+# public, add "push" to the Windows job's triggers.
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 7 * * *"  # nightly, 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install -e . --no-deps
+          npm ci --no-audit --no-fund
+      - name: Verification baseline
+        run: python tools/run_ci.py
+
+  windows:
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install -e . --no-deps
+          npm ci --no-audit --no-fund
+      - name: Verification baseline
+        run: python tools/run_ci.py

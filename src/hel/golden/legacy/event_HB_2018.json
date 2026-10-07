@@ -1,0 +1,12 @@
+{
+  "event_id": "HB_2018",
+  "luminous_end": {
+    "time_utc": "2018-01-17T01:08:34",
+    "lat": 42.451,
+    "lon": -83.857,
+    "altitude_m": 19730.0,
+    "speed_mps": 3000.0,
+    "azimuth_deg": 301.56,
+    "declination_deg": 66.14
+  }
+}

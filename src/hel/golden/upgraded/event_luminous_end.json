@@ -1,0 +1,25 @@
+{
+  "contract": "hel.event",
+  "contract_version": "1.0",
+  "event_id": "Monahans",
+  "luminous_end": {
+    "lat": 31.520952,
+    "lon": -102.834272,
+    "altitude_m": 21000.0,
+    "terminus_speed_mps": 3000.0,
+    "azimuth_deg": 300,
+    "declination_deg": 40,
+    "time_utc": "1998-03-23T00:36:00Z"
+  },
+  "meteorite_properties": {
+    "density_kg_m3": 3420.0,
+    "k2_factor": 0.44,
+    "shape_factor": 1.5,
+    "pre_atmospheric_mass_kg": 100,
+    "density_mode": "literature"
+  },
+  "mass_lost_pct": 95.0,
+  "radar_duration_s": 1,
+  "radar_duration_nexrad_s": 1,
+  "entry_speed_mps": 15000.0
+}

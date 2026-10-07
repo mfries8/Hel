@@ -1,0 +1,19 @@
+# Changelog
+
+All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
+package. Each release lists the contract versions it defines.
+
+## 1.0.0 (2026-10-06)
+
+Contracts: `hel.event` 1.0, `hel.radar` 1.0, `hel.seismo` 1.1.
+
+### Added
+
+- The three contracts as pydantic models, with JSON Schemas and TypeScript
+  types generated from them (H-001, under Fenrir F-003).
+- The upgrader for every legacy layout in the recovered-falls archive, and
+  the validator.
+- The `hel` command (`validate`, `upgrade`, `versions`).
+- Golden files: current examples, plus real legacy files with their expected
+  upgrades.
+- The conventions document, repository rules and CI.

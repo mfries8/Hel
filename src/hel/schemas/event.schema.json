@@ -1,0 +1,467 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hel.event/1.0",
+  "title": "EventDocument",
+  "$defs": {
+    "Find": {
+      "additionalProperties": true,
+      "description": "One recovered meteorite.",
+      "properties": {
+        "lat": {
+          "description": "Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "mass_kg": {
+          "description": "Recovered mass, kg.",
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "lat",
+        "lon",
+        "mass_kg"
+      ],
+      "title": "Find",
+      "type": "object"
+    },
+    "LuminousEnd": {
+      "additionalProperties": true,
+      "description": "The end of the luminous (bright) flight: where dark flight begins.\n\nThis is the terminus that dark-flight analysis starts from, and the prior\nthat Loki's inversion refines.",
+      "properties": {
+        "time_utc": {
+          "description": "Time of the luminous-flight end (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "description": "Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Altitude above mean sea level, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "terminus_speed_mps": {
+          "description": "Speed at the luminous-flight end, m/s. Often an assumed value (conventionally 3000 m/s) rather than a measurement.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "azimuth_deg": {
+          "description": "Direction of travel, degrees clockwise from true north (not the radiant direction, which differs by 180 degrees).",
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "declination_deg": {
+          "description": "Trajectory angle below horizontal, degrees (90 = vertical).",
+          "maximum": 90.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "altitude_m",
+        "terminus_speed_mps",
+        "azimuth_deg",
+        "declination_deg"
+      ],
+      "title": "LuminousEnd",
+      "type": "object"
+    },
+    "LuminousStart": {
+      "additionalProperties": true,
+      "description": "The beginning of the luminous flight, when it was observed.",
+      "properties": {
+        "time_utc": {
+          "description": "Time of the luminous-flight start (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "description": "Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Altitude above mean sea level, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "entry_speed_mps": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Speed at the luminous-flight start, m/s."
+        },
+        "azimuth_deg": {
+          "anyOf": [
+            {
+              "maximum": 360.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Direction of travel, degrees clockwise from true north."
+        },
+        "declination_deg": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Trajectory angle below horizontal, degrees."
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "altitude_m"
+      ],
+      "title": "LuminousStart",
+      "type": "object"
+    },
+    "MeteoriteProperties": {
+      "additionalProperties": true,
+      "description": "Assumed or known properties of the meteoroid and its fragments.",
+      "properties": {
+        "density_kg_m3": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Bulk density used for analysis, kg/m^3."
+        },
+        "density_mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "literature",
+                "known",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where density_kg_m3 comes from: 'known' (measured on recovered meteorites), 'literature' (a class average), or 'unknown' (a default)."
+        },
+        "k2_factor": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Dielectric factor |K|^2 used for radar reflectivity (dimensionless)."
+        },
+        "shape_factor": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Shape factor A = area / volume^(2/3) (dimensionless; global value)."
+        },
+        "pre_atmospheric_mass_kg": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Estimated pre-atmospheric mass, kg."
+        },
+        "solved_density_kg_m3": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Density solved by a previous analysis, kg/m^3. A result, not an input."
+        },
+        "toughness_index": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Toughness index from a previous analysis (dimensionless)."
+        }
+      },
+      "title": "MeteoriteProperties",
+      "type": "object"
+    },
+    "TrajectoryPoint": {
+      "additionalProperties": true,
+      "description": "One observed point on the luminous trajectory.",
+      "properties": {
+        "time_utc": {
+          "description": "Time at this point (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "description": "Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Altitude above mean sea level, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "speed_mps": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Speed at this point along the trajectory, m/s."
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "altitude_m"
+      ],
+      "title": "TrajectoryPoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "A complete ``event.json`` file.",
+  "properties": {
+    "contract": {
+      "const": "hel.event",
+      "description": "Contract name; always 'hel.event'.",
+      "type": "string"
+    },
+    "contract_version": {
+      "description": "Contract version, MAJOR.MINOR (e.g. '1.0').",
+      "type": "string"
+    },
+    "event_id": {
+      "description": "Short identifier for the fall.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "luminous_end": {
+      "$ref": "#/$defs/LuminousEnd"
+    },
+    "luminous_start": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LuminousStart"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "luminous_trajectory": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/TrajectoryPoint"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "entry_speed_mps": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Speed at atmospheric entry, m/s."
+    },
+    "meteorite_properties": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MeteoriteProperties"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "mass_lost_pct": {
+      "anyOf": [
+        {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Share of the pre-atmospheric mass lost in bright flight, percent."
+    },
+    "radar_duration_s": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Time after the terminus over which radar signatures are sought, s."
+    },
+    "radar_duration_nexrad_s": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "As radar_duration_s, for NEXRAD radars specifically, s."
+    },
+    "tnt_equivalent_kt": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Energy of the fireball, kilotons of TNT."
+    },
+    "finds": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Find"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Recovered meteorites. Absent means not recorded; an empty list means none recovered."
+    }
+  },
+  "required": [
+    "contract",
+    "contract_version",
+    "event_id",
+    "luminous_end"
+  ],
+  "type": "object"
+}

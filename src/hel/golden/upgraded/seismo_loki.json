@@ -1,0 +1,725 @@
+{
+  "contract": "hel.seismo",
+  "contract_version": "1.1",
+  "schema_version": "1.1.0",
+  "event_id": "Glendale",
+  "generated_utc": "2026-09-18T20:56:40.226726Z",
+  "loki_version": "0.1.0.dev0",
+  "software": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "pyproj": "3.8.0",
+      "obspy": "1.5.1",
+      "pymsis": "0.13.0",
+      "pydantic": "2.13.5",
+      "xarray": "2026.7.0"
+    }
+  },
+  "run": {
+    "invocation": null,
+    "rng_seed": null,
+    "stage_timestamps": {},
+    "config": {}
+  },
+  "bundle_manifest": [
+    {
+      "relative_path": "cache/raytable_54e5b37b574ac70a_20_5000.npz",
+      "role": "raytable",
+      "sha256": "05a93f06a7501f45750473937524d486d98fa14d2b38e19db24e56fbc1d26044",
+      "bytes": 67106,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AE.Y14A.--.HHE.mseed",
+      "role": "waveform",
+      "sha256": "1ffa3e327aa4cad04dee0e5575992308abb4ff08b96994301db72056af200b34",
+      "bytes": 60416,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AE.Y14A.--.HHN.mseed",
+      "role": "waveform",
+      "sha256": "ffb0b7aef208c20235b1d2ca611d847b10a8d5e3168479c097d51d43b5683566",
+      "bytes": 59392,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AE.Y14A.--.HHZ.mseed",
+      "role": "waveform",
+      "sha256": "0deaed4fde5c9c7f7d558ed1fd2ac8799fa8d321568012bf08e8b029107de92e",
+      "bytes": 50688,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AE.Y14A.xml",
+      "role": "stationxml",
+      "sha256": "0b2d2a1db78963e12031d510eccab41fbf5918379bcaa7d128dfa4e88a494d0c",
+      "bytes": 35612,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AM.R39DB.xml",
+      "role": "stationxml",
+      "sha256": "d60582f228d2bece463dbcb61b5f665181b4488b606d4590a07c528c2c4b2b35",
+      "bytes": 9167,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AM.R8B58.xml",
+      "role": "stationxml",
+      "sha256": "011c21e23ea1adf3e77a696b18010f3fbf01461a03a436a5888302142da033f1",
+      "bytes": 9165,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AM.RA15A.00.EHZ.mseed",
+      "role": "waveform",
+      "sha256": "b98b4a4acc4d1f8f8b392ba8842254e9b64ac211f243eddf911f30069d614610",
+      "bytes": 132608,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AM.RA15A.xml",
+      "role": "stationxml",
+      "sha256": "433073b796f372561865dd5d0d6cef793b2a6d3358140392f6da3974f9beb3ed",
+      "bytes": 8560,
+      "media_type": null
+    },
+    {
+      "relative_path": "waveforms/AM.RC5F0.xml",
+      "role": "stationxml",
+      "sha256": "f80eb34ca7242d7c22e025e51a3c00f35a7e3022c278b0628ca48e1be779fb1e",
+      "bytes": 9165,
+      "media_type": null
+    }
+  ],
+  "source_event": {
+    "luminous_end": {
+      "time_utc": "2018-07-27T03:22:50Z",
+      "lat": 33.73699546530571,
+      "lon": -112.3163926364226,
+      "altitude_m": 26336.61260197449,
+      "speed_mps": 3000.0000005910283,
+      "azimuth_deg": 123.48149830872053,
+      "declination_deg": 52.07981113675642
+    },
+    "luminous_start": null,
+    "luminous_trajectory": null,
+    "priors_used": [],
+    "sigmas": {},
+    "raw": {
+      "event_id": "Glendale",
+      "terminus": {
+        "lat": 33.73699546530571,
+        "lon": -112.3163926364226,
+        "altitude_m": 26336.61260197449,
+        "speed_mps": 3000.0000005910283,
+        "azimuth_deg": 123.48149830872053,
+        "declination_deg": 52.07981113675642,
+        "time_utc": "2018-07-27T03:22:50"
+      },
+      "meteorite_properties": {
+        "density_kg_m3": 3380.0,
+        "density_mode": "literature",
+        "k2_factor": 0.44,
+        "shape_factor": 1.5,
+        "pre_atmospheric_mass_kg": 500.0,
+        "solved_density_kg_m3": 3380.0
+      },
+      "mass_lost_pct": 95.0,
+      "cosmic_velocity_kms": 15.0,
+      "radar_duration_seconds": 13,
+      "radar_duration_seconds_nexrad": 13,
+      "finds": [
+        {
+          "lat": 33.687394,
+          "lon": -112.218558,
+          "mass_g": 85.0
+        }
+      ]
+    },
+    "raw_sha256": "1832540211f37d470809577eda55b4aa7a6f38c47df98dee05cffddff0a32659"
+  },
+  "provenance": {
+    "fdsn": null,
+    "atmosphere": null,
+    "ray_tracer": null,
+    "run_config": {}
+  },
+  "stations": [
+    {
+      "id": "AM.R8B58",
+      "network": "AM",
+      "station": "R8B58",
+      "location": "00",
+      "lat": 33.666666666666664,
+      "lon": -112.0523599466292,
+      "elevation_m": 444.0,
+      "site_name": "Raspberry Shake Citizen Science Station",
+      "instrument": {
+        "model": "Raspberry Shake",
+        "channels": [
+          "SHZ"
+        ],
+        "response_status": "none",
+        "metadata_quality": "missing"
+      },
+      "channels_detail": [
+        {
+          "channel": "SHZ",
+          "location": "00",
+          "sample_rate_hz": 50.0,
+          "orientation_azimuth_deg": 0.0,
+          "orientation_dip_deg": -90.0,
+          "gain": null,
+          "epoch_start": "2016-12-19T15:07:56.001000Z",
+          "epoch_end": "2019-04-22T20:13:01.111000Z"
+        }
+      ],
+      "role": "no_data",
+      "distance_km": 25.69,
+      "azimuth_deg": 107.6,
+      "distance_to_trajectory_km": null,
+      "distance_to_ground_track_km": null,
+      "waveform_files": {},
+      "stationxml_file": null,
+      "noise": null,
+      "usable": true,
+      "exclusion_reason": null,
+      "aspect": {
+        "regime": "front",
+        "aspect_deg": 12.489630272719817,
+        "borderline": false
+      }
+    },
+    {
+      "id": "AM.R39DB",
+      "network": "AM",
+      "station": "R39DB",
+      "location": "00",
+      "lat": 33.612612612612615,
+      "lon": -111.93882207476953,
+      "elevation_m": 439.0,
+      "site_name": "Raspberry Shake Citizen Science Station",
+      "instrument": {
+        "model": "Raspberry Shake",
+        "channels": [
+          "SHZ"
+        ],
+        "response_status": "none",
+        "metadata_quality": "missing"
+      },
+      "channels_detail": [
+        {
+          "channel": "SHZ",
+          "location": "00",
+          "sample_rate_hz": 50.0,
+          "orientation_azimuth_deg": 0.0,
+          "orientation_dip_deg": -90.0,
+          "gain": null,
+          "epoch_start": "2017-06-22T16:49:28.001000Z",
+          "epoch_end": "2019-06-15T17:00:05.019000Z"
+        }
+      ],
+      "role": "no_data",
+      "distance_km": 37.634,
+      "azimuth_deg": 111.4,
+      "distance_to_trajectory_km": null,
+      "distance_to_ground_track_km": null,
+      "waveform_files": {},
+      "stationxml_file": null,
+      "noise": null,
+      "usable": true,
+      "exclusion_reason": null,
+      "aspect": {
+        "regime": "front",
+        "aspect_deg": 19.565170527782374,
+        "borderline": false
+      }
+    }
+  ],
+  "candidates": [
+    {
+      "channel": "AE.Y14A..HHZ",
+      "network": "AE",
+      "station": "Y14A",
+      "location": "",
+      "channel_code": "HHZ",
+      "is_infrasound": false,
+      "distance_km": 67.518,
+      "window_start": "2018-07-27T03:25:41.313156Z",
+      "window_end": "2018-07-27T03:27:48.417541Z",
+      "pick_time": "2018-07-27T03:26:31.043156Z",
+      "pick_time_uncertainty_s": 10.0,
+      "features": {
+        "sta_lta_peak": 28.208008483834636,
+        "sta_lta_peak_time_s": 97.19,
+        "trigger_onset_s": 84.73,
+        "snr_db": 22.135767482102246,
+        "peak_over_noise": 91.94972914809698,
+        "rise_time_s": 11.93,
+        "duration_s": 6.19,
+        "envelope_kurtosis": 64.8489924322203,
+        "envelope_skew": 7.366159146307265,
+        "dominant_freq_hz": 6.625,
+        "spectral_centroid_hz": 5.241659811630811,
+        "spectral_bandwidth_hz": 1.8701590820589913,
+        "band_energy_fraction": 0.9775937541107357,
+        "emergence": 0.0,
+        "n_samples": 16212,
+        "sampling_rate_hz": 100.0
+      },
+      "polarization": null,
+      "pick_id": "AE.Y14A..HHZ@2018-07-27T03:26:31.043156Z",
+      "implied_celerity_mps": 327.9,
+      "celerity_score": 1.0,
+      "association_support": 2,
+      "associated_celerity_mps": 350.0,
+      "confidence": 0.9482,
+      "_review": {
+        "decision": "approve"
+      }
+    }
+  ],
+  "picks": [
+    {
+      "pick_id": "AE.Y14A..HHZ@2018-07-27T03:26:31.043156Z",
+      "station_id": "AE.Y14A",
+      "channels": [
+        "HHZ"
+      ],
+      "phase": "airwave-direct",
+      "path_type": "tropospheric",
+      "time_utc": "2018-07-27T03:26:42.456237Z",
+      "time_uncertainty_s": 10.0,
+      "back_azimuth_deg": null,
+      "back_azimuth_uncertainty_deg": null,
+      "back_azimuth_ambiguous": null,
+      "incidence_deg": null,
+      "incidence_uncertainty_deg": null,
+      "rectilinearity": null,
+      "amplitude": null,
+      "amplitude_unit": null,
+      "dominant_freq_hz": 6.625,
+      "snr_db": 22.135767482102246,
+      "detector": {
+        "confidence": 0.9482,
+        "method": "sta_lta+polarization+celerity",
+        "features": {
+          "sta_lta_peak": 28.208008483834636,
+          "sta_lta_peak_time_s": 97.19,
+          "trigger_onset_s": 84.73,
+          "snr_db": 22.135767482102246,
+          "peak_over_noise": 91.94972914809698,
+          "rise_time_s": 11.93,
+          "duration_s": 6.19,
+          "envelope_kurtosis": 64.8489924322203,
+          "envelope_skew": 7.366159146307265,
+          "dominant_freq_hz": 6.625,
+          "spectral_centroid_hz": 5.241659811630811,
+          "spectral_bandwidth_hz": 1.8701590820589913,
+          "band_energy_fraction": 0.9775937541107357,
+          "emergence": 0.0,
+          "n_samples": 16212,
+          "sampling_rate_hz": 100.0
+        }
+      },
+      "review": {
+        "status": "approved",
+        "reviewer": "auto",
+        "reviewed_utc": "2026-09-18T20:53:55.771484Z",
+        "notes": null
+      },
+      "predicted": {
+        "time_utc": null,
+        "residual_s": null,
+        "celerity_mps": 327.9,
+        "source_point": {
+          "lat": 33.73699546530571,
+          "lon": -112.3163926364226,
+          "alt_m": 26336.61260197449,
+          "time_utc": "2018-07-27T03:22:50Z"
+        },
+        "turning_height_m": null,
+        "ground_distance_m": null,
+        "slant_distance_m": null,
+        "path_type": null
+      },
+      "associated_source": "trajectory"
+    },
+    {
+      "pick_id": "AE.Y14A..HHZ@2018-07-27T03:26:31.043156Z:frag",
+      "station_id": "AE.Y14A",
+      "channels": [
+        "HHZ"
+      ],
+      "phase": "fragmentation",
+      "path_type": "tropospheric",
+      "time_utc": "2018-07-27T03:26:43.239677Z",
+      "time_uncertainty_s": 10.0,
+      "back_azimuth_deg": null,
+      "back_azimuth_uncertainty_deg": null,
+      "back_azimuth_ambiguous": null,
+      "incidence_deg": null,
+      "incidence_uncertainty_deg": null,
+      "rectilinearity": null,
+      "amplitude": null,
+      "amplitude_unit": null,
+      "dominant_freq_hz": 6.625,
+      "snr_db": 22.135767482102246,
+      "detector": {
+        "confidence": 0.9482,
+        "method": "sta_lta+polarization+celerity",
+        "features": {
+          "sta_lta_peak": 28.208008483834636,
+          "sta_lta_peak_time_s": 97.19,
+          "trigger_onset_s": 84.73,
+          "snr_db": 22.135767482102246,
+          "peak_over_noise": 91.94972914809698,
+          "rise_time_s": 11.93,
+          "duration_s": 6.19,
+          "envelope_kurtosis": 64.8489924322203,
+          "envelope_skew": 7.366159146307265,
+          "dominant_freq_hz": 6.625,
+          "spectral_centroid_hz": 5.241659811630811,
+          "spectral_bandwidth_hz": 1.8701590820589913,
+          "band_energy_fraction": 0.9775937541107357,
+          "emergence": 0.0,
+          "n_samples": 16212,
+          "sampling_rate_hz": 100.0
+        }
+      },
+      "review": {
+        "status": "approved",
+        "reviewer": "auto",
+        "reviewed_utc": "2026-09-18T20:53:55.771484Z",
+        "notes": null
+      },
+      "predicted": {
+        "time_utc": null,
+        "residual_s": null,
+        "celerity_mps": 327.9,
+        "source_point": {
+          "lat": 33.73699546530571,
+          "lon": -112.3163926364226,
+          "alt_m": 26336.61260197449,
+          "time_utc": "2018-07-27T03:22:50Z"
+        },
+        "turning_height_m": null,
+        "ground_distance_m": null,
+        "slant_distance_m": null,
+        "path_type": null
+      },
+      "associated_source": "fragmentation"
+    }
+  ],
+  "solution": {
+    "converged": true,
+    "method": "global(DE)+local(least_squares,linear)",
+    "trajectory": {
+      "model": "constrained-line-linear",
+      "reference_point": {
+        "lat": 33.72737883236587,
+        "lon": -112.32400483607994,
+        "alt_m": 30335.255284726194,
+        "time_utc": "2018-07-27T03:22:50Z"
+      },
+      "travel_azimuth_deg": 123.48149832219687,
+      "travel_elevation_deg": -52.07981113675642,
+      "travel_declination_deg": 52.07981113675642,
+      "velocity": {
+        "at_reference_mps": 4776.459424641348,
+        "deceleration_model": "linear",
+        "params": {
+          "decel": 19925.71164000665
+        }
+      },
+      "constrained_altitude_range_m": [
+        12000.0,
+        45000.0
+      ],
+      "endpoints": {
+        "start": {
+          "lat": 33.78415746418078,
+          "lon": -112.42688742787101,
+          "alt_m": 45000.0,
+          "time_utc": "2018-07-27T03:22:48.852863Z"
+        },
+        "end": {
+          "lat": 33.72563064451084,
+          "lon": -112.32084175565193,
+          "alt_m": 29884.087638592788,
+          "time_utc": "2018-07-27T03:22:50.232133Z"
+        }
+      },
+      "path_samples": [
+        {
+          "t_utc": "2018-07-27T03:22:48.852863Z",
+          "lat": 33.78415746418078,
+          "lon": -112.42688742787101,
+          "alt_m": 45000.0,
+          "velocity_mps": 27633.985992339858,
+          "mach": null
+        },
+        {
+          "t_utc": "2018-07-27T03:22:48.942431Z",
+          "lat": 33.77684662612262,
+          "lon": -112.4136238355651,
+          "alt_m": 43110.5109548241,
+          "velocity_mps": 25849.282116091934,
+          "mach": null
+        },
+        {
+          "t_utc": "2018-07-27T03:22:49.038659Z",
+          "lat": 33.76953435411719,
+          "lon": -112.40036249675555,
+          "alt_m": 41221.021909648196,
+          "velocity_mps": 23931.853041705428,
+          "mach": null
+        }
+      ],
+      "uncertainty": {
+        "method": "monte-carlo",
+        "n_samples": 150,
+        "param_names": [
+          "cross_m",
+          "d_azimuth_deg",
+          "d_decl_deg",
+          "d_alt_m",
+          "v0_mps",
+          "decel",
+          "dt0_s"
+        ],
+        "param_covariance": [
+          [
+            1396829300.6918721,
+            -803.5524550766519,
+            -1.0692133310786461e-10,
+            672917.7346495123,
+            -693682.7572154495,
+            -3107481.4368950897,
+            0.0
+          ],
+          [
+            -803.552455076652,
+            20.386001300598377,
+            1.2614013696183143e-14,
+            -82.79731141039697,
+            21.450907448318297,
+            -87.09638752885112,
+            0.0
+          ],
+          [
+            -1.0692133310786463e-10,
+            1.2614013695898358e-14,
+            20.346607066627893,
+            5.162222227985353e-10,
+            -2.2062071852630576e-10,
+            -2.2803781662194092e-10,
+            0.0
+          ],
+          [
+            672917.7346495127,
+            -82.79731141039694,
+            5.162222227985353e-10,
+            66898835704.498985,
+            20232.73732668559,
+            4509903.103052688,
+            0.0
+          ],
+          [
+            -693682.7572154495,
+            21.450907448318297,
+            -2.2062071852630576e-10,
+            20232.737326685583,
+            113608022832678.38,
+            571720.1464644385,
+            0.0
+          ],
+          [
+            -3107481.4368950888,
+            -87.09638752885114,
+            -2.2803781662194087e-10,
+            4509903.103052688,
+            571720.1464644384,
+            113644563048004.1,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            113660440765883.66
+          ]
+        ],
+        "ground_track_sigma_m": [
+          4281.8352880512475,
+          4274.83319110786,
+          4268.090706302297,
+          4261.609061428663,
+          4255.3894438597545,
+          4249.432999507843,
+          4243.740831812037,
+          4238.3140007533075,
+          4233.153521899517,
+          4228.260365481678,
+          4223.635455504231,
+          4219.279668890874,
+          4215.193834666802,
+          4211.378733181164,
+          4207.835095368867
+        ],
+        "radiant_sigma_deg": 4.51508596824007,
+        "declination_sigma_deg": 4.510721346595009,
+        "velocity_sigma_mps": 10658706.433366029,
+        "ensemble": [
+          {
+            "cross_m": 1052.04105212151,
+            "d_azimuth_deg": 0.00048491048649619236,
+            "d_decl_deg": -1.3220380595259693e-17,
+            "d_alt_m": 4966.371159058434,
+            "v0_mps": 4776.885775157969,
+            "decel": 19918.841731578224,
+            "dt0_s": 0.0
+          }
+        ],
+        "ensemble_file": null
+      },
+      "dark_flight_speed_mps": 3000.0,
+      "dark_flight_speed_point": {
+        "lat": 33.72631922824208,
+        "lon": -112.32208761042449,
+        "alt_m": 30061.792975358454,
+        "time_utc": "2018-07-27T03:22:50.089154Z"
+      },
+      "dark_flight_speed_point_extrapolated": false,
+      "altitude_markers": [
+        {
+          "altitude_km": 30.0,
+          "lat": 33.726079790398074,
+          "lon": -112.32165439060303,
+          "alt_m": 30000.0,
+          "time_utc": "2018-07-27T03:22:50.118034Z",
+          "velocity_mps": 2424.538850516176,
+          "extrapolated": false
+        }
+      ],
+      "dark_flight_termini": [],
+      "azimuth_at_bound": false,
+      "declination_at_bound": false
+    },
+    "fragmentations": [],
+    "ground_track": [
+      {
+        "lat": 33.78415746418078,
+        "lon": -112.42688742787101,
+        "t_utc": "2018-07-27T03:22:48.852863Z",
+        "alt_m_above": 45000.0,
+        "segment": "constrained",
+        "horizontal_sigma_m": 4281.8352880512475
+      },
+      {
+        "lat": 33.78172067752782,
+        "lon": -112.42246598001235,
+        "t_utc": "2018-07-27T03:22:48.882062Z",
+        "alt_m_above": 44370.1703182747,
+        "segment": "constrained",
+        "horizontal_sigma_m": 4277.750731500938
+      },
+      {
+        "lat": 33.77928373150064,
+        "lon": -112.41804478258402,
+        "t_utc": "2018-07-27T03:22:48.911903Z",
+        "alt_m_above": 43740.3406365494,
+        "segment": "constrained",
+        "horizontal_sigma_m": 4273.709443640267
+      }
+    ],
+    "residual_summary": {
+      "rms_s": 0.05330620419332068,
+      "baz_rms_deg": null,
+      "n_picks_used": 4,
+      "n_picks_rejected": 0,
+      "n_stations_used": 2,
+      "linearized_sigma": {
+        "azimuth_deg": 0.10660743858246069,
+        "declination_deg": 0.08528932060355834,
+        "cross_m": 37374.1795989139,
+        "alt_m": 258648.0924045236
+      },
+      "azimuthal_gap_deg": 298.99650931559216,
+      "condition_number": null
+    },
+    "diagnostics": {
+      "rejected_station_ids": [],
+      "dt0_sigma_s": 10661165.075444788,
+      "cost": 0.00011366205565840182,
+      "decel_model": "linear"
+    },
+    "comparison_to_prior": {
+      "position_offset_m": 1278.831608666826,
+      "radiant_offset_deg": 1.3476324056682643e-08,
+      "speed_delta_mps": 1776.4594240503197,
+      "dt0_s": 0.0,
+      "agreement": "good"
+    },
+    "strewn_field_handoff": {
+      "lat": 33.72563064451084,
+      "lon": -112.32084175565193,
+      "alt_m": 29884.087638592788,
+      "time_utc": "2018-07-27T03:22:50.232133Z"
+    }
+  },
+  "wavefronts": null,
+  "geojson": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -112.3163926364226,
+            33.73699546530571,
+            26336.61260197449
+          ]
+        },
+        "properties": {
+          "kind": "prior_luminous_end",
+          "time_utc": "2018-07-27T03:22:50Z",
+          "azimuth_deg": 123.48149830872053,
+          "declination_deg": 52.07981113675642
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -112.0523599466292,
+            33.666666666666664
+          ]
+        },
+        "properties": {
+          "kind": "station",
+          "id": "AM.R8B58",
+          "role": "no_data",
+          "usable": true,
+          "is_raspberry_shake": true,
+          "is_infrasound": false,
+          "response_status": "none",
+          "n_picks": 0,
+          "aspect_regime": "front",
+          "aspect_deg": 12.489630272719817,
+          "aspect_borderline": false
+        }
+      }
+    ]
+  }
+}

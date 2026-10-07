@@ -1,0 +1,23 @@
+{
+  "contract": "hel.event",
+  "contract_version": "1.0",
+  "event_id": "Quinault",
+  "luminous_end": {
+    "lat": 47.352392929039134,
+    "lon": -124.53060349250633,
+    "altitude_m": 42165.183238623984,
+    "terminus_speed_mps": 3000.00000554735,
+    "azimuth_deg": 309.9999618944019,
+    "declination_deg": 25.610041286146814,
+    "time_utc": "2018-03-08T03:05:21Z"
+  },
+  "meteorite_properties": {
+    "density_kg_m3": 2318.3545333431266,
+    "k2_factor": 0.44,
+    "shape_factor": 1.5,
+    "pre_atmospheric_mass_kg": 1000.0,
+    "toughness_index": 189.17015218469126
+  },
+  "mass_lost_pct": 95.0,
+  "entry_speed_mps": 14000.0
+}

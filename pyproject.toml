@@ -1,0 +1,96 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hel"
+version = "1.0.0"
+description = "Shared data contracts for the Yggdrasil meteorite-fall software suite"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+authors = [{ name = "Marc Fries" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: Other/Proprietary License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+# Hel's only runtime dependency. Every app that pins a copy of Hel (D26)
+# must also depend on it.
+dependencies = ["pydantic>=2.7,<3"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.9",
+    "mypy>=1.13",
+]
+
+[project.scripts]
+hel = "hel.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["hel*"]
+
+[tool.setuptools.package-data]
+hel = ["py.typed", "schemas/*.json", "types/*.ts", "golden/**/*.json"]
+
+# --- Lint: code style plus the annotation standard (Fenrir D7) ---------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "tools"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F",   # pycodestyle, pyflakes
+    "I",             # import sorting
+    "UP",            # modern Python syntax
+    "B",             # likely bugs
+    "D",             # docstrings on every module, class and function (D7)
+    "ANN",           # type annotations on every function (D7)
+]
+ignore = [
+    "D105",  # magic methods: the method name documents itself
+    "D107",  # __init__: documented in the class docstring
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Test functions are named for the behavior they check; a docstring per test
+# would restate the name. Modules and helpers in tests still need docstrings.
+# Tests feed raw parsed JSON (deliberately untyped) to the upgrader.
+"tests/**" = ["D103", "ANN201", "ANN401"]
+# The upgrader and validator walk parsed JSON, whose values are genuinely
+# dynamic; everything else they do is fully typed.
+"src/hel/upgrade.py" = ["ANN401"]
+"src/hel/validate.py" = ["ANN401"]
+
+# --- Types: strict everywhere -------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src", "tools", "tests"]
+mypy_path = "src,tools"
+explicit_package_bases = true
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+# --- Tests ------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+
+[tool.coverage.run]
+source = ["hel"]
+branch = true

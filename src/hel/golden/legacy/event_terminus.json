@@ -1,0 +1,41 @@
+{
+  "event_id": "ParkForest",
+  "terminus": {
+    "lat": 41.42331581764056,
+    "lon": -87.72586678700631,
+    "altitude_m": 21918.58986996449,
+    "speed_mps": 3000.000002301472,
+    "azimuth_deg": 3.4995735138440036,
+    "declination_deg": 10.291162420372313,
+    "time_utc": "2003-03-27T05:50:14"
+  },
+  "meteorite_properties": {
+    "density_kg_m3": 3360.0,
+    "density_mode": "literature",
+    "k2_factor": 0.44,
+    "shape_factor": 1.5,
+    "pre_atmospheric_mass_kg": 1121.0,
+    "solved_density_kg_m3": 3403.004775842476
+  },
+  "mass_lost_pct": 95.0,
+  "cosmic_velocity_kms": 19.5,
+  "radar_duration_seconds": 469,
+  "radar_duration_seconds_nexrad": 469,
+  "finds": [
+    {
+      "lat": 41.421572,
+      "lon": -87.598824,
+      "mass_g": 25.0
+    },
+    {
+      "lat": 41.437483,
+      "lon": -87.633508,
+      "mass_g": 25.0
+    },
+    {
+      "lat": 41.458585,
+      "lon": -87.641174,
+      "mass_g": 25.0
+    }
+  ]
+}

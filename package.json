@@ -1,0 +1,10 @@
+{
+  "name": "hel-codegen",
+  "private": true,
+  "description": "Generates Hel's TypeScript types from its JSON Schemas (tools/generate_artifacts.py).",
+  "type": "module",
+  "devDependencies": {
+    "json-schema-to-typescript": "^15.0.4",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,1050 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hel.radar/1.0",
+  "title": "RadarDocument",
+  "$defs": {
+    "Blip": {
+      "additionalProperties": true,
+      "description": "A group of pixels treated as one detection (Gjallerhorn G14).",
+      "properties": {
+        "blip_id": {
+          "description": "Identifier, unique within the file.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "radar_name": {
+          "description": "Radar station identifier.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "sweep_number": {
+          "description": "1-based sweep number of the member pixels.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "volume_scan_start_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First-ray time of that sweep (UTC); identifies the volume."
+        },
+        "pixel_indices": {
+          "description": "0-based indices into that sweep's pixels list.",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "lat": {
+          "description": "Centroid latitude, degrees north.",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Centroid longitude, degrees east.",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Centroid altitude above mean sea level, metres.",
+          "type": "number"
+        },
+        "time_utc": {
+          "description": "Representative time of the blip (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "centroid_weighting": {
+          "default": "reflectivity",
+          "description": "How member pixels are weighted in the centroid (linear Z for 'reflectivity').",
+          "enum": [
+            "reflectivity",
+            "equal"
+          ],
+          "type": "string"
+        },
+        "uncertainty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BlipUncertainty"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "blip_id",
+        "radar_name",
+        "sweep_number",
+        "pixel_indices",
+        "lat",
+        "lon",
+        "altitude_m",
+        "time_utc"
+      ],
+      "title": "Blip",
+      "type": "object"
+    },
+    "BlipUncertainty": {
+      "additionalProperties": true,
+      "description": "A blip's 1-sigma position uncertainty (Fenrir D17).",
+      "properties": {
+        "semi_major_m": {
+          "description": "Horizontal ellipse semi-major axis, metres.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "semi_minor_m": {
+          "description": "Horizontal ellipse semi-minor axis, metres.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "azimuth_deg": {
+          "description": "Direction of the semi-major axis, degrees clockwise from true north.",
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "altitude_sigma_m": {
+          "description": "Altitude uncertainty, metres.",
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "semi_major_m",
+        "semi_minor_m",
+        "azimuth_deg",
+        "altitude_sigma_m"
+      ],
+      "title": "BlipUncertainty",
+      "type": "object"
+    },
+    "Pixel": {
+      "additionalProperties": true,
+      "description": "One exported radar gate group (a \"pixel\") selected as a signature.",
+      "properties": {
+        "pixel_lat": {
+          "description": "Gate-centre latitude, degrees north.",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "pixel_long": {
+          "description": "Gate-centre longitude, degrees east.",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "pixel_altitude": {
+          "description": "Gate-centre altitude above mean sea level, metres (4/3 effective-Earth model).",
+          "type": "number"
+        },
+        "pixel_azimuth": {
+          "description": "Ray azimuth, degrees clockwise from true north, as seen from the radar.",
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "pixel_distance": {
+          "description": "Mean slant range of the gate group, metres.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "gate_size_m": {
+          "description": "Range depth of the exported gate group, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "reflectivity_time": {
+          "description": "Time of this pixel's source ray (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "file_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Source radar volume file name."
+        },
+        "radar_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar station identifier."
+        },
+        "sweep_number": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "1-based sweep number."
+        },
+        "source_sweep_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based sweep index in the source volume."
+        },
+        "volume_scan_start_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First-ray time of the sweep (UTC)."
+        },
+        "selection_plot_field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar product used to draw the selection grid."
+        },
+        "selection_gate_size_m": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Width of the selected plot cell, metres."
+        },
+        "selection_ray_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based ray index of the selected plot cell."
+        },
+        "selection_plot_range_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based plot-resolution range index of the selected cell."
+        },
+        "source_ray_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based source ray index of this gate group."
+        },
+        "source_gate_start_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based first native gate (inclusive)."
+        },
+        "source_gate_end_index_exclusive": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based last native gate (exclusive)."
+        },
+        "source_field_multiplier": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Gate replication factor of the source product."
+        },
+        "azimuth_spacing_deg": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Median ray-to-ray azimuth spacing, degrees."
+        },
+        "radar_x_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "East offset of the gate from the radar, metres."
+        },
+        "radar_y_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "North offset of the gate from the radar, metres."
+        },
+        "pixel_utm_zone": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "UTM zone number (from longitude only)."
+        },
+        "pixel_utm_easting": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "UTM easting, metres."
+        },
+        "pixel_utm_northing": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "UTM northing, metres."
+        },
+        "cut_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Scan cut type, e.g. 'SUR' (surveillance) or 'DOP' (Doppler)."
+        },
+        "prf_hz": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pulse repetition frequency, Hz."
+        },
+        "range_gate_spacing": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Copy of the sweep's base gate spacing, metres."
+        },
+        "azimuthal_resolution": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Copy of the sweep's azimuth spacing, degrees."
+        },
+        "vcp_mode": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Copy of the sweep's NEXRAD volume coverage pattern."
+        },
+        "reflectivity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reflectivity, dBZ."
+        },
+        "velocity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radial velocity, m/s; positive away from the radar."
+        },
+        "spectrum_width": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Spectrum width, m/s."
+        },
+        "differential_reflectivity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Differential reflectivity ZDR, dB."
+        },
+        "correlation_coefficient": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Co-polar correlation coefficient (dimensionless)."
+        },
+        "differential_phase": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Differential phase, degrees."
+        },
+        "clutter_filter_power_removed": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Power removed by the clutter filter, dB."
+        },
+        "quality": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PixelQuality"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "pixel_lat",
+        "pixel_long",
+        "pixel_altitude",
+        "pixel_azimuth",
+        "pixel_distance",
+        "gate_size_m",
+        "reflectivity_time"
+      ],
+      "title": "Pixel",
+      "type": "object"
+    },
+    "PixelQuality": {
+      "additionalProperties": true,
+      "description": "Per-pixel quality flags (Gjallerhorn G13). Absent means not assessed.",
+      "properties": {
+        "clutter_filtered": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True when the clutter filter removed power at this gate (see the clutter_filter_power_removed product for how much)."
+        },
+        "near_detection_floor": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True when reflectivity is within the sweep's floor uncertainty of the floor."
+        },
+        "range_folding_risk": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True when the gate may hold a range-folded (second-trip) echo."
+        }
+      },
+      "title": "PixelQuality",
+      "type": "object"
+    },
+    "Producer": {
+      "additionalProperties": true,
+      "description": "The software that wrote the file.",
+      "properties": {
+        "name": {
+          "description": "Program name, e.g. 'Gjallerhorn'.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Program version."
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Producer",
+      "type": "object"
+    },
+    "Sweep": {
+      "additionalProperties": true,
+      "description": "One radar sweep (one elevation scan) and its selected pixels.",
+      "properties": {
+        "radar_name": {
+          "description": "Radar station identifier, e.g. 'KGRR'.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "sweep_number": {
+          "description": "1-based sweep number in the volume.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "pixels": {
+          "items": {
+            "$ref": "#/$defs/Pixel"
+          },
+          "type": "array"
+        },
+        "source_sweep_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "0-based sweep index in the source volume."
+        },
+        "volume_scan_start_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First-ray time of this sweep (UTC)."
+        },
+        "radar_volume_start_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Start time of the whole volume scan (UTC)."
+        },
+        "sweep_elevation": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Elevation angle of the sweep, degrees above horizontal."
+        },
+        "range_gate_spacing": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Base range-gate spacing of the sweep, metres."
+        },
+        "azimuthal_resolution": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Median ray-to-ray azimuth spacing, degrees."
+        },
+        "pulse_width_m": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Transmitted pulse length expressed as range, metres."
+        },
+        "vcp_mode": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "NEXRAD volume coverage pattern number."
+        },
+        "scan_pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Scan-strategy name, for networks without VCP numbers."
+        },
+        "band": {
+          "anyOf": [
+            {
+              "enum": [
+                "S",
+                "C",
+                "X"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar band: S (~10 cm), C (~5 cm) or X (~3 cm)."
+        },
+        "wavelength_m": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Wavelength, metres."
+        },
+        "beamwidth_h_deg": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Horizontal half-power beam width, degrees."
+        },
+        "beamwidth_v_deg": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Vertical half-power beam width, degrees."
+        },
+        "calibration_constant_dbz0": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reflectivity calibration constant dBZ0: the reflectivity at 1 km range that gives a signal-to-noise ratio of 0 dB, dBZ."
+        },
+        "snr_threshold_db": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reflectivity signal-to-noise threshold for this cut, dB."
+        },
+        "noise_level_dbm": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Receiver noise level for this cut, dBm."
+        },
+        "detection_floor_dbz_at_1km": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Weakest detectable reflectivity at 1 km range, dBZ: calibration_constant_dbz0 + snr_threshold_db. At range R (km) the floor is this value + 20*log10(R)."
+        },
+        "radar_latitude": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": -90.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar latitude, degrees north."
+        },
+        "radar_longitude": {
+          "anyOf": [
+            {
+              "maximum": 180.0,
+              "minimum": -180.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar longitude, degrees east."
+        },
+        "radar_altitude_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar antenna altitude above mean sea level, metres."
+        },
+        "selection_polygon": {
+          "anyOf": [
+            {
+              "items": {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Legacy lasso polygon as (azimuth degrees, range-gate index) vertices."
+        },
+        "deselected_pixels": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Legacy record of pixels removed from the selection."
+        }
+      },
+      "required": [
+        "radar_name",
+        "sweep_number",
+        "pixels"
+      ],
+      "title": "Sweep",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "A complete ``RADAR_*.json`` file.",
+  "properties": {
+    "contract": {
+      "const": "hel.radar",
+      "description": "Contract name; always 'hel.radar'.",
+      "type": "string"
+    },
+    "contract_version": {
+      "description": "Contract version, MAJOR.MINOR (e.g. '1.0').",
+      "type": "string"
+    },
+    "file_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Export name given by the producer."
+    },
+    "producer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Producer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "sweeps": {
+      "items": {
+        "$ref": "#/$defs/Sweep"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "blips": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Blip"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "contract",
+    "contract_version",
+    "sweeps"
+  ],
+  "type": "object"
+}

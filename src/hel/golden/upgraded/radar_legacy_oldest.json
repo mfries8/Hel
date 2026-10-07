@@ -1,0 +1,196 @@
+{
+  "contract": "hel.radar",
+  "contract_version": "1.0",
+  "sweeps": [
+    {
+      "radar_name": "KDGX",
+      "radar_latitude": 32.279945373535156,
+      "radar_longitude": -89.98444366455078,
+      "radar_altitude_m": 185.0,
+      "vcp_mode": 35,
+      "beamwidth_h_deg": 1.5,
+      "sweep_number": 1,
+      "sweep_elevation": 0.3076171875,
+      "selection_polygon": [
+        [
+          234.09555100921622,
+          579
+        ],
+        [
+          235.2232651958274,
+          580
+        ],
+        [
+          235.78712228913298,
+          568
+        ],
+        [
+          235.59329641330916,
+          561
+        ],
+        [
+          234.7034594379363,
+          561
+        ],
+        [
+          234.09555100921622,
+          579
+        ]
+      ],
+      "deselected_pixels": [],
+      "pixels": [
+        {
+          "pixel_azimuth": 235.24749755859375,
+          "pixel_distance": 143125.0,
+          "pixel_altitude": 2158.826538546011,
+          "cut_type": "SUR",
+          "reflectivity": -3.5,
+          "differential_reflectivity": -3.03125,
+          "correlation_coefficient": 1.0516666173934937,
+          "differential_phase": 43.72201156616211,
+          "reflectivity_time": "2022-04-27T13:06:15.424Z",
+          "pixel_lat": 31.538097513040828,
+          "pixel_long": -91.22274677602182,
+          "pixel_utm_easting": 668719.517832013,
+          "pixel_utm_northing": 3490608.151533625,
+          "pixel_utm_zone": 15,
+          "azimuth_spacing_deg": 0.5000001697779033,
+          "gate_size_m": 250.0,
+          "prf_hz": 319.6190490722656,
+          "source_gate_start_index": 564,
+          "source_gate_end_index_exclusive": 565,
+          "file_name": "KDGX20220427_130536_V06"
+        },
+        {
+          "pixel_azimuth": 235.24749755859375,
+          "pixel_distance": 143375.0,
+          "pixel_altitude": 2164.611211134121,
+          "cut_type": "SUR",
+          "reflectivity": -3.5,
+          "differential_reflectivity": 0.9375,
+          "correlation_coefficient": 1.0516666173934937,
+          "differential_phase": 68.40379333496094,
+          "reflectivity_time": "2022-04-27T13:06:15.424Z",
+          "pixel_lat": 31.53679115428422,
+          "pixel_long": -91.22489244934928,
+          "pixel_utm_easting": 668518.1410236487,
+          "pixel_utm_northing": 3490460.025854227,
+          "pixel_utm_zone": 15,
+          "azimuth_spacing_deg": 0.5000001697779033,
+          "gate_size_m": 250.0,
+          "prf_hz": 319.6190490722656,
+          "source_gate_start_index": 565,
+          "source_gate_end_index_exclusive": 566,
+          "file_name": "KDGX20220427_130536_V06"
+        },
+        {
+          "pixel_azimuth": 235.24749755859375,
+          "pixel_distance": 143625.0,
+          "pixel_altitude": 2169.902237806469,
+          "cut_type": "SUR",
+          "reflectivity": -3.5,
+          "differential_reflectivity": -0.71875,
+          "correlation_coefficient": 0.721666693687439,
+          "differential_phase": 76.51351928710938,
+          "reflectivity_time": "2022-04-27T13:06:15.424Z",
+          "pixel_lat": 31.535484759264968,
+          "pixel_long": -91.22703806292405,
+          "pixel_utm_easting": 668316.7642926207,
+          "pixel_utm_northing": 3490311.9004228674,
+          "pixel_utm_zone": 15,
+          "azimuth_spacing_deg": 0.5000001697779033,
+          "gate_size_m": 250.0,
+          "prf_hz": 319.6190490722656,
+          "source_gate_start_index": 566,
+          "source_gate_end_index_exclusive": 567,
+          "file_name": "KDGX20220427_130536_V06"
+        }
+      ],
+      "volume_scan_start_time": "2022-04-27T13:05:36Z"
+    },
+    {
+      "radar_name": "KDGX",
+      "radar_latitude": 32.279945373535156,
+      "radar_longitude": -89.98444366455078,
+      "radar_altitude_m": 185.0,
+      "vcp_mode": 35,
+      "beamwidth_h_deg": 1.5,
+      "sweep_number": 12,
+      "sweep_elevation": 3.9990234375,
+      "selection_polygon": [
+        [
+          235.74862072825886,
+          563
+        ],
+        [
+          235.74862072825886,
+          558
+        ],
+        [
+          237.35007754407573,
+          558
+        ],
+        [
+          237.3303064722755,
+          563
+        ],
+        [
+          235.74862072825886,
+          563
+        ]
+      ],
+      "deselected_pixels": [],
+      "pixels": [
+        {
+          "pixel_azimuth": 236.5521240234375,
+          "pixel_distance": 142125.0,
+          "pixel_altitude": 11278.322802973911,
+          "cut_type": "DOP",
+          "reflectivity": 3.0,
+          "velocity": 21.5,
+          "spectrum_width": 9.0,
+          "differential_reflectivity": -0.71875,
+          "correlation_coefficient": 0.9883333444595337,
+          "differential_phase": 66.64080810546875,
+          "reflectivity_time": "2022-04-27T13:04:30.643Z",
+          "pixel_lat": 31.56729961320695,
+          "pixel_long": -91.2335921479544,
+          "pixel_utm_easting": 667637.5447567843,
+          "pixel_utm_northing": 3493828.795848607,
+          "pixel_utm_zone": 15,
+          "azimuth_spacing_deg": 1.000008330703778,
+          "gate_size_m": 250.0,
+          "prf_hz": 920.761962890625,
+          "source_gate_start_index": 560,
+          "source_gate_end_index_exclusive": 561,
+          "file_name": "KDGX20220427_125659_V06"
+        },
+        {
+          "pixel_azimuth": 236.5521240234375,
+          "pixel_distance": 142375.0,
+          "pixel_altitude": 11299.679499551654,
+          "cut_type": "DOP",
+          "reflectivity": 0.0,
+          "velocity": -21.0,
+          "spectrum_width": 7.0,
+          "differential_reflectivity": 2.96875,
+          "correlation_coefficient": 1.0516666173934937,
+          "differential_phase": 34.20189666748047,
+          "reflectivity_time": "2022-04-27T13:04:30.643Z",
+          "pixel_lat": 31.56603524401569,
+          "pixel_long": -91.2357725173002,
+          "pixel_utm_easting": 667432.8512748367,
+          "pixel_utm_northing": 3493685.2902653874,
+          "pixel_utm_zone": 15,
+          "azimuth_spacing_deg": 1.000008330703778,
+          "gate_size_m": 250.0,
+          "prf_hz": 920.761962890625,
+          "source_gate_start_index": 561,
+          "source_gate_end_index_exclusive": 562,
+          "file_name": "KDGX20220427_125659_V06"
+        }
+      ],
+      "volume_scan_start_time": "2022-04-27T12:56:59Z"
+    }
+  ]
+}

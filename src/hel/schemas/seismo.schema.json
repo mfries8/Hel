@@ -1,0 +1,2084 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hel.seismo/1.1",
+  "title": "SeismoDocument",
+  "$defs": {
+    "AltitudeMarker": {
+      "additionalProperties": true,
+      "description": "A fixed-altitude waypoint (20/30/40/50 km) along the solved trajectory.",
+      "properties": {
+        "altitude_km": {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "alt_m": {
+          "type": "number"
+        },
+        "time_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "velocity_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "extrapolated": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "altitude_km",
+        "lat",
+        "lon",
+        "alt_m"
+      ],
+      "title": "AltitudeMarker",
+      "type": "object"
+    },
+    "ChannelDetail": {
+      "additionalProperties": true,
+      "description": "Metadata for one recording channel.",
+      "properties": {
+        "channel": {
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "type": "string"
+        },
+        "sample_rate_hz": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "orientation_azimuth_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "orientation_dip_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "gain": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "epoch_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "epoch_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "title": "ChannelDetail",
+      "type": "object"
+    },
+    "DarkFlightTerminus": {
+      "additionalProperties": true,
+      "description": "Where a fragment of one mass slows to the dark-flight target speed.\n\nLoki reports these per mass as alternative starting points for Fenrir's\ncoarse scan when the true fragment mass is unknown.",
+      "properties": {
+        "mass_kg": {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "alt_m": {
+          "type": "number"
+        },
+        "time_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "velocity_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "extrapolated": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "mass_kg",
+        "lat",
+        "lon",
+        "alt_m"
+      ],
+      "title": "DarkFlightTerminus",
+      "type": "object"
+    },
+    "Detector": {
+      "additionalProperties": true,
+      "description": "The automatic detector's verdict on a pick.",
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "method": {
+          "default": "",
+          "type": "string"
+        },
+        "features": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "confidence"
+      ],
+      "title": "Detector",
+      "type": "object"
+    },
+    "Ellipse": {
+      "additionalProperties": true,
+      "description": "A horizontal 1-sigma error ellipse.",
+      "properties": {
+        "semi_major_m": {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "semi_minor_m": {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "azimuth_deg": {
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "semi_major_m",
+        "semi_minor_m",
+        "azimuth_deg"
+      ],
+      "title": "Ellipse",
+      "type": "object"
+    },
+    "Fragmentation": {
+      "additionalProperties": true,
+      "description": "One located fragmentation burst.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "alt_m": {
+          "type": "number"
+        },
+        "time_utc": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/FragmentationUncertainty"
+        },
+        "supporting_picks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "n_stations": {
+          "default": 0,
+          "type": "integer"
+        },
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "relative_energy": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "is_terminal": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "lat",
+        "lon",
+        "alt_m",
+        "time_utc"
+      ],
+      "title": "Fragmentation",
+      "type": "object"
+    },
+    "FragmentationUncertainty": {
+      "additionalProperties": true,
+      "description": "Uncertainty of a located fragmentation.",
+      "properties": {
+        "horizontal_sigma_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "vertical_sigma_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "time_sigma_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ellipse": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Ellipse"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "FragmentationUncertainty",
+      "type": "object"
+    },
+    "GroundTrackPoint": {
+      "additionalProperties": true,
+      "description": "One point of the trajectory's ground track.",
+      "properties": {
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "t_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "alt_m_above": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "segment": {
+          "anyOf": [
+            {
+              "enum": [
+                "constrained",
+                "extrapolated"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "horizontal_sigma_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "lat",
+        "lon"
+      ],
+      "title": "GroundTrackPoint",
+      "type": "object"
+    },
+    "Instrument": {
+      "additionalProperties": true,
+      "description": "The station's instrument and its response status.",
+      "properties": {
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "channels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "response_status": {
+          "default": "none",
+          "enum": [
+            "removed",
+            "nominal",
+            "none"
+          ],
+          "type": "string"
+        },
+        "metadata_quality": {
+          "default": "missing",
+          "enum": [
+            "ok",
+            "suspect",
+            "missing"
+          ],
+          "type": "string"
+        }
+      },
+      "title": "Instrument",
+      "type": "object"
+    },
+    "ManifestEntry": {
+      "additionalProperties": true,
+      "description": "One file of the ``Loki_output/`` bundle, with its integrity hash.",
+      "properties": {
+        "relative_path": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "media_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "relative_path",
+        "role",
+        "sha256",
+        "bytes"
+      ],
+      "title": "ManifestEntry",
+      "type": "object"
+    },
+    "PathSample": {
+      "additionalProperties": true,
+      "description": "One sample along the solved trajectory.",
+      "properties": {
+        "t_utc": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "alt_m": {
+          "type": "number"
+        },
+        "velocity_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mach": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "t_utc",
+        "lat",
+        "lon",
+        "alt_m"
+      ],
+      "title": "PathSample",
+      "type": "object"
+    },
+    "Pick": {
+      "additionalProperties": true,
+      "description": "One approved arrival used in the solve.",
+      "properties": {
+        "pick_id": {
+          "type": "string"
+        },
+        "station_id": {
+          "type": "string"
+        },
+        "channels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "phase": {
+          "default": "unknown",
+          "enum": [
+            "ballistic",
+            "fragmentation",
+            "airwave-direct",
+            "air-coupled-rayleigh",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "path_type": {
+          "default": "unknown",
+          "enum": [
+            "direct",
+            "tropospheric",
+            "stratospheric",
+            "thermospheric",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "time_utc": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "time_uncertainty_s": {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "back_azimuth_deg": {
+          "anyOf": [
+            {
+              "maximum": 360.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "back_azimuth_uncertainty_deg": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "back_azimuth_ambiguous": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "incidence_deg": {
+          "anyOf": [
+            {
+              "maximum": 180.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "incidence_uncertainty_deg": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "rectilinearity": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "amplitude": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "amplitude_unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dominant_freq_hz": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "snr_db": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "detector": {
+          "$ref": "#/$defs/Detector"
+        },
+        "review": {
+          "$ref": "#/$defs/Review"
+        },
+        "predicted": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PickPrediction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "associated_source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "pick_id",
+        "station_id",
+        "time_utc",
+        "time_uncertainty_s",
+        "detector"
+      ],
+      "title": "Pick",
+      "type": "object"
+    },
+    "PickPrediction": {
+      "additionalProperties": true,
+      "description": "What the solved trajectory predicts for one pick.",
+      "properties": {
+        "time_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "residual_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "celerity_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_point": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PointTime"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "turning_height_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ground_distance_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "slant_distance_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "path_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "PickPrediction",
+      "type": "object"
+    },
+    "PointTime": {
+      "additionalProperties": true,
+      "description": "A point in space and (optionally) time.",
+      "properties": {
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "alt_m": {
+          "description": "Altitude above mean sea level, metres.",
+          "type": "number"
+        },
+        "time_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "lat",
+        "lon",
+        "alt_m"
+      ],
+      "title": "PointTime",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": true,
+      "description": "What Loki looked up: data centres, atmosphere and ray tracing.",
+      "properties": {
+        "fdsn": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "atmosphere": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ray_tracer": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "run_config": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "Review": {
+      "additionalProperties": true,
+      "description": "The analyst's review of a pick.",
+      "properties": {
+        "status": {
+          "default": "pending",
+          "enum": [
+            "approved",
+            "rejected",
+            "auto",
+            "pending"
+          ],
+          "type": "string"
+        },
+        "reviewer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reviewed_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Review",
+      "type": "object"
+    },
+    "RunInfo": {
+      "additionalProperties": true,
+      "description": "What is needed to reproduce the Loki run.",
+      "properties": {
+        "invocation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "rng_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "stage_timestamps": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "config": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "title": "RunInfo",
+      "type": "object"
+    },
+    "SeismoLuminousEnd": {
+      "additionalProperties": true,
+      "description": "Loki's form of the luminous-flight end (the inversion prior).",
+      "properties": {
+        "time_utc": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Altitude above mean sea level, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "speed_mps": {
+          "description": "Speed at the luminous-flight end, m/s.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "azimuth_deg": {
+          "description": "Direction of travel, degrees clockwise from north.",
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "declination_deg": {
+          "description": "Degrees below horizontal.",
+          "maximum": 90.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "altitude_m",
+        "speed_mps",
+        "azimuth_deg",
+        "declination_deg"
+      ],
+      "title": "SeismoLuminousEnd",
+      "type": "object"
+    },
+    "SeismoStation": {
+      "additionalProperties": true,
+      "description": "One discovered seismic or infrasound station.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "station": {
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "type": "string"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "elevation_m": {
+          "default": 0.0,
+          "type": "number"
+        },
+        "site_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "instrument": {
+          "$ref": "#/$defs/Instrument"
+        },
+        "channels_detail": {
+          "items": {
+            "$ref": "#/$defs/ChannelDetail"
+          },
+          "type": "array"
+        },
+        "role": {
+          "default": "not_evaluated",
+          "enum": [
+            "used",
+            "rejected",
+            "no_data",
+            "not_evaluated"
+          ],
+          "type": "string"
+        },
+        "distance_km": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "azimuth_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "distance_to_trajectory_km": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "distance_to_ground_track_km": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "waveform_files": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/WaveformFile"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": "object"
+        },
+        "stationxml_file": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "noise": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "usable": {
+          "default": true,
+          "type": "boolean"
+        },
+        "exclusion_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "aspect": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StationAspect"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "network",
+        "station",
+        "lat",
+        "lon"
+      ],
+      "title": "SeismoStation",
+      "type": "object"
+    },
+    "SeismoTrajectoryPoint": {
+      "additionalProperties": true,
+      "description": "One point of an optional luminous trajectory, in Loki's form.",
+      "properties": {
+        "time_utc": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Altitude above mean sea level, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "speed_mps": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Speed, m/s."
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "altitude_m"
+      ],
+      "title": "SeismoTrajectoryPoint",
+      "type": "object"
+    },
+    "SoftwareInfo": {
+      "additionalProperties": true,
+      "description": "Software versions that affect the result, for reproducibility.",
+      "properties": {
+        "python": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "platform": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "packages": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "title": "SoftwareInfo",
+      "type": "object"
+    },
+    "Solution": {
+      "additionalProperties": true,
+      "description": "Loki's inversion result.",
+      "properties": {
+        "converged": {
+          "default": false,
+          "type": "boolean"
+        },
+        "method": {
+          "default": "",
+          "type": "string"
+        },
+        "trajectory": {
+          "$ref": "#/$defs/Trajectory"
+        },
+        "fragmentations": {
+          "items": {
+            "$ref": "#/$defs/Fragmentation"
+          },
+          "type": "array"
+        },
+        "ground_track": {
+          "items": {
+            "$ref": "#/$defs/GroundTrackPoint"
+          },
+          "type": "array"
+        },
+        "residual_summary": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "diagnostics": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "comparison_to_prior": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "strewn_field_handoff": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PointTime"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "trajectory"
+      ],
+      "title": "Solution",
+      "type": "object"
+    },
+    "SourceEvent": {
+      "additionalProperties": true,
+      "description": "The ``event.json`` prior Loki started from.",
+      "properties": {
+        "luminous_end": {
+          "$ref": "#/$defs/SeismoLuminousEnd"
+        },
+        "luminous_start": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SeismoLuminousEnd"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "luminous_trajectory": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SeismoTrajectoryPoint"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "priors_used": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sigmas": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "type": "object"
+        },
+        "raw": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "raw_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "luminous_end"
+      ],
+      "title": "SourceEvent",
+      "type": "object"
+    },
+    "StationAspect": {
+      "additionalProperties": true,
+      "description": "Where a station sits relative to the fireball before the solve.\n\n``front`` is ahead of the fireball, ``broadside`` beside it, ``back``\nbehind it; ``borderline`` when the label changes within the assumed\nazimuth tolerance.",
+      "properties": {
+        "regime": {
+          "enum": [
+            "front",
+            "broadside",
+            "back"
+          ],
+          "type": "string"
+        },
+        "aspect_deg": {
+          "maximum": 180.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "borderline": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "regime",
+        "aspect_deg"
+      ],
+      "title": "StationAspect",
+      "type": "object"
+    },
+    "Trajectory": {
+      "additionalProperties": true,
+      "description": "The solved bolide trajectory.",
+      "properties": {
+        "model": {
+          "default": "constrained-line-with-deceleration",
+          "type": "string"
+        },
+        "reference_point": {
+          "$ref": "#/$defs/PointTime"
+        },
+        "travel_azimuth_deg": {
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "travel_elevation_deg": {
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "travel_declination_deg": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "velocity": {
+          "$ref": "#/$defs/Velocity"
+        },
+        "constrained_altitude_range_m": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "type": "array"
+        },
+        "endpoints": {
+          "additionalProperties": {
+            "$ref": "#/$defs/PointTime"
+          },
+          "type": "object"
+        },
+        "path_samples": {
+          "items": {
+            "$ref": "#/$defs/PathSample"
+          },
+          "type": "array"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/TrajectoryUncertainty"
+        },
+        "dark_flight_speed_mps": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dark_flight_speed_point": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PointTime"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dark_flight_speed_point_extrapolated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "altitude_markers": {
+          "items": {
+            "$ref": "#/$defs/AltitudeMarker"
+          },
+          "type": "array"
+        },
+        "dark_flight_termini": {
+          "items": {
+            "$ref": "#/$defs/DarkFlightTerminus"
+          },
+          "type": "array"
+        },
+        "azimuth_at_bound": {
+          "default": false,
+          "type": "boolean"
+        },
+        "declination_at_bound": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "reference_point",
+        "travel_azimuth_deg",
+        "travel_elevation_deg",
+        "velocity",
+        "constrained_altitude_range_m"
+      ],
+      "title": "Trajectory",
+      "type": "object"
+    },
+    "TrajectoryUncertainty": {
+      "additionalProperties": true,
+      "description": "Uncertainty of the solved trajectory.\n\n``radiant_sigma_deg`` is the azimuth component only, despite its name\n(kept for compatibility with Loki).",
+      "properties": {
+        "method": {
+          "default": "monte-carlo",
+          "type": "string"
+        },
+        "n_samples": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "param_names": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "param_covariance": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "ground_track_sigma_m": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "radiant_sigma_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "declination_sigma_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "velocity_sigma_mps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ensemble": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ensemble_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "TrajectoryUncertainty",
+      "type": "object"
+    },
+    "Velocity": {
+      "additionalProperties": true,
+      "description": "Speed at the reference point and the deceleration model.",
+      "properties": {
+        "at_reference_mps": {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "deceleration_model": {
+          "default": "none",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "at_reference_mps"
+      ],
+      "title": "Velocity",
+      "type": "object"
+    },
+    "WaveformFile": {
+      "additionalProperties": true,
+      "description": "A raw waveform file in the bundle.",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "format": {
+          "default": "MSEED",
+          "type": "string"
+        },
+        "actual_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "actual_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "npts": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "sample_rate_hz": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "gap_count": {
+          "default": 0,
+          "type": "integer"
+        },
+        "requested_window": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "WaveformFile",
+      "type": "object"
+    },
+    "WavefrontFrame": {
+      "additionalProperties": true,
+      "description": "One animation frame of wavefront rings.",
+      "properties": {
+        "t_offset_s": {
+          "type": "number"
+        },
+        "polygons": {
+          "items": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "t_offset_s"
+      ],
+      "title": "WavefrontFrame",
+      "type": "object"
+    },
+    "Wavefronts": {
+      "additionalProperties": true,
+      "description": "Optional wavefront animation keyframes.",
+      "properties": {
+        "reference_time_utc": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "frames": {
+          "items": {
+            "$ref": "#/$defs/WavefrontFrame"
+          },
+          "type": "array"
+        },
+        "frames_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "reference_time_utc"
+      ],
+      "title": "Wavefronts",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "A complete ``seismo.json`` file.",
+  "properties": {
+    "contract": {
+      "const": "hel.seismo",
+      "description": "Contract name; always 'hel.seismo'.",
+      "type": "string"
+    },
+    "contract_version": {
+      "description": "Contract version, MAJOR.MINOR (e.g. '1.1').",
+      "type": "string"
+    },
+    "schema_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Deprecated: Loki's own version string ('1.1.0')."
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "generated_utc": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "loki_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "software": {
+      "$ref": "#/$defs/SoftwareInfo"
+    },
+    "run": {
+      "$ref": "#/$defs/RunInfo"
+    },
+    "bundle_manifest": {
+      "items": {
+        "$ref": "#/$defs/ManifestEntry"
+      },
+      "type": "array"
+    },
+    "source_event": {
+      "$ref": "#/$defs/SourceEvent"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance"
+    },
+    "stations": {
+      "items": {
+        "$ref": "#/$defs/SeismoStation"
+      },
+      "type": "array"
+    },
+    "candidates": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "picks": {
+      "items": {
+        "$ref": "#/$defs/Pick"
+      },
+      "type": "array"
+    },
+    "solution": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Solution"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "wavefronts": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Wavefronts"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "geojson": {
+      "additionalProperties": true,
+      "type": "object"
+    }
+  },
+  "required": [
+    "contract",
+    "contract_version",
+    "event_id",
+    "source_event"
+  ],
+  "type": "object"
+}

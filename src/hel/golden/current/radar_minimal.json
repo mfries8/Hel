@@ -1,0 +1,22 @@
+{
+  "contract": "hel.radar",
+  "contract_version": "1.0",
+  "sweeps": [
+    {
+      "radar_name": "KGRR",
+      "sweep_number": 3,
+      "pixels": [
+        {
+          "pixel_lat": 41.463433137974576,
+          "pixel_long": -87.67845183445066,
+          "pixel_altitude": 9751.40476042884,
+          "pixel_azimuth": 228.69140625,
+          "pixel_distance": 237625.0,
+          "gate_size_m": 250.0,
+          "reflectivity_time": "2003-03-27T05:51:55.402Z",
+          "reflectivity": 12.0
+        }
+      ]
+    }
+  ]
+}
