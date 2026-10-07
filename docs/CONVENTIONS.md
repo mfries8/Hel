@@ -9,7 +9,7 @@ units and reference direction; this page states the rules once.
 | Contract | File | Written by | Read by | Version |
 | --- | --- | --- | --- | --- |
 | `hel.event` | `event.json` | the analyst, tools | Fenrir, Loki | 1.0 |
-| `hel.radar` | `RADAR_*.json` | Gjallerhorn | Fenrir | 1.0 |
+| `hel.radar` | `RADAR_*.json` | Gjallerhorn | Fenrir | 1.1 |
 | `hel.seismo` | `Loki_output/seismo.json` | Loki | Fenrir | 1.1 |
 
 - Every file begins with `"contract": "hel.<name>"` and

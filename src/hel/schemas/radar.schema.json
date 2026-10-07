@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "hel.radar/1.0",
+  "$id": "hel.radar/1.1",
   "title": "RadarDocument",
   "$defs": {
     "Blip": {
@@ -173,6 +173,32 @@
           "description": "Time of this pixel's source ray (UTC).",
           "format": "date-time",
           "type": "string"
+        },
+        "velocity_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Time of this gate's velocity data, when timed separately (UTC)."
+        },
+        "dual_pol_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Time of this gate's dual-polarization data, when timed separately (UTC)."
         },
         "file_name": {
           "anyOf": [
@@ -477,6 +503,18 @@
           ],
           "default": null,
           "description": "Copy of the sweep's NEXRAD volume coverage pattern."
+        },
+        "sweep_elevation": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Copy of the sweep's elevation angle, degrees above horizontal."
         },
         "reflectivity": {
           "anyOf": [

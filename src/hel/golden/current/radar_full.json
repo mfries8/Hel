@@ -1,6 +1,6 @@
 {
   "contract": "hel.radar",
-  "contract_version": "1.0",
+  "contract_version": "1.1",
   "file_name": "RADAR_Example",
   "producer": {"name": "Gjallerhorn", "version": "1.0.0"},
   "sweeps": [
@@ -35,6 +35,8 @@
           "pixel_distance": 43625.0,
           "gate_size_m": 250.0,
           "reflectivity_time": "2023-01-01T00:00:31.25Z",
+          "velocity_time": "2023-01-01T00:00:31.25Z",
+          "dual_pol_time": "2023-01-01T00:00:31.25Z",
           "file_name": "KBMX20230101_000000_V06",
           "radar_name": "KBMX",
           "sweep_number": 2,

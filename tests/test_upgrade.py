@@ -281,3 +281,15 @@ def test_current_files_pass_through_unchanged(name: str, contract: str) -> None:
     assert result.contract == contract
     assert result.layout == "current"
     assert result.document == data
+
+
+def test_radar_oldest_per_product_times_are_converted_and_empties_dropped() -> None:
+    legacy = _read("legacy", "radar_SM_2012.json")
+    pixel = legacy["sweeps"][0]["pixels"][0]
+    pixel["timeD"] = ""
+    result = upgrade_radar(legacy)
+    upgraded = result.document["sweeps"][0]["pixels"][0]
+    assert upgraded["reflectivity_time"].endswith("Z")
+    assert upgraded["velocity_time"].endswith("Z")
+    assert "dual_pol_time" not in upgraded and "timeD" not in upgraded
+    assert any("dropped empty 'timeD'" in c for c in result.changes)

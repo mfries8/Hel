@@ -1,0 +1,73 @@
+{
+  "contract": "hel.radar",
+  "contract_version": "1.1",
+  "sweeps": [
+    {
+      "radar_name": "KBBX",
+      "radar_latitude": 39.49611282348633,
+      "radar_longitude": -121.63166809082031,
+      "radar_altitude_m": 62.0,
+      "vcp_mode": 32,
+      "beamwidth_h_deg": 1.5,
+      "sweep_number": 3,
+      "sweep_elevation": 1.494140625,
+      "selection_polygon": [
+        [
+          141.7898082594222,
+          395
+        ],
+        [
+          141.72003718762195,
+          379
+        ],
+        [
+          143.07669691707045,
+          378
+        ],
+        [
+          144.1775293832515,
+          381
+        ],
+        [
+          144.2860621616074,
+          391
+        ],
+        [
+          142.98366882133683,
+          394
+        ],
+        [
+          141.7898082594222,
+          395
+        ]
+      ],
+      "deselected_pixels": [],
+      "pixels": [
+        {
+          "pixel_azimuth": 142.4981689453125,
+          "pixel_distance": 95375.0,
+          "pixel_altitude": 3083.4474271573126,
+          "cut_type": "SUR",
+          "reflectivity": 2.0,
+          "differential_reflectivity": -0.6875,
+          "correlation_coefficient": 0.7049999833106995,
+          "differential_phase": 0.7051936984062195,
+          "reflectivity_time": "2012-04-22T14:57:21.973Z",
+          "velocity_time": "2012-04-22T14:57:21.973Z",
+          "dual_pol_time": "2012-04-22T14:57:21.973Z",
+          "pixel_lat": 38.81263513368898,
+          "pixel_long": -120.96316781510573,
+          "pixel_utm_easting": 676845.1518381968,
+          "pixel_utm_northing": 4297955.489467363,
+          "pixel_utm_zone": 10,
+          "azimuth_spacing_deg": 0.9999700774721448,
+          "gate_size_m": 250.0,
+          "source_gate_start_index": 381,
+          "source_gate_end_index_exclusive": 382,
+          "file_name": "KBBX20120422_145414_V07.gz"
+        }
+      ],
+      "volume_scan_start_time": "2012-04-22T14:54:14Z"
+    }
+  ]
+}

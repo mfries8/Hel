@@ -32,7 +32,7 @@ from hel.validate import (
     validate,
 )
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # Every contract and the version this release of Hel writes.
 CONTRACT_VERSIONS: dict[str, str] = {

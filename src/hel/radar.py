@@ -21,6 +21,9 @@ Version history:
   per-sweep radar metadata (band, beam widths, calibration constant, SNR
   threshold, noise level, detection floor), per-pixel quality flags, and
   blips with uncertainty ellipses.
+- **1.1** (2026-10-06): optional pixel fields ``velocity_time`` and
+  ``dual_pol_time`` (the oldest exports timed each product group
+  separately) and ``sweep_elevation`` (a per-pixel copy some exports carry).
 """
 
 from __future__ import annotations
@@ -32,7 +35,7 @@ from pydantic import Field, field_validator
 from hel._base import HelModel, UtcDatetime, check_contract_version
 
 CONTRACT = "hel.radar"
-CONTRACT_VERSION = "1.0"
+CONTRACT_VERSION = "1.1"
 SUPPORTED_MAJOR = 1
 
 # Canonical radar product names and their units. Every network's product is
@@ -98,6 +101,14 @@ class Pixel(HelModel):
         gt=0.0, description="Range depth of the exported gate group, metres."
     )
     reflectivity_time: UtcDatetime = Field(description="Time of this pixel's source ray (UTC).")
+    velocity_time: UtcDatetime | None = Field(
+        default=None,
+        description="Time of this gate's velocity data, when timed separately (UTC).",
+    )
+    dual_pol_time: UtcDatetime | None = Field(
+        default=None,
+        description="Time of this gate's dual-polarization data, when timed separately (UTC).",
+    )
 
     # --- Identity and provenance (optional) -----------------------------------------
     file_name: str | None = Field(default=None, description="Source radar volume file name.")
@@ -162,6 +173,9 @@ class Pixel(HelModel):
     )
     vcp_mode: int | None = Field(
         default=None, description="Copy of the sweep's NEXRAD volume coverage pattern."
+    )
+    sweep_elevation: float | None = Field(
+        default=None, description="Copy of the sweep's elevation angle, degrees above horizontal."
     )
 
     # --- Radar products (optional; null means the source value was not finite) -----

@@ -369,6 +369,14 @@ export interface Pixel {
    */
   reflectivity_time: string;
   /**
+   * Time of this gate's velocity data, when timed separately (UTC).
+   */
+  velocity_time?: string | null;
+  /**
+   * Time of this gate's dual-polarization data, when timed separately (UTC).
+   */
+  dual_pol_time?: string | null;
+  /**
    * Source radar volume file name.
    */
   file_name?: string | null;
@@ -464,6 +472,10 @@ export interface Pixel {
    * Copy of the sweep's NEXRAD volume coverage pattern.
    */
   vcp_mode?: number | null;
+  /**
+   * Copy of the sweep's elevation angle, degrees above horizontal.
+   */
+  sweep_elevation?: number | null;
   /**
    * Reflectivity, dBZ.
    */

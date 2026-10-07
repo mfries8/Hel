@@ -11,7 +11,7 @@ Hel defines the files they exchange:
 | Contract | File | Version |
 | --- | --- | --- |
 | `hel.event` | `event.json`: what is known about a fall | 1.0 |
-| `hel.radar` | `RADAR_*.json`: the selected radar signatures | 1.0 |
+| `hel.radar` | `RADAR_*.json`: the selected radar signatures | 1.1 |
 | `hel.seismo` | `seismo.json`: Loki's evidence and trajectory | 1.1 |
 
 The rules every contract follows (UTC times, SI units, azimuth and

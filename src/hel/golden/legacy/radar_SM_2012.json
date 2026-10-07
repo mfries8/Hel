@@ -1,0 +1,76 @@
+{
+  "sweeps": [
+    {
+      "file": "KBBX20120422_145414_V07.gz",
+      "radar_name": "KBBX",
+      "radar_latitude": 39.49611282348633,
+      "radar_longitude": -121.63166809082031,
+      "radar_elevation": 62.0,
+      "vcp": 32,
+      "horizontal_beamwidth": 1.5,
+      "year": 2012,
+      "month": 4,
+      "day": 22,
+      "time_stamp": "14:54:14",
+      "exceeds_midnight": false,
+      "sweep_number": 3,
+      "sweep_elevation": 1.494140625,
+      "selection_points": [
+        [
+          141.7898082594222,
+          395
+        ],
+        [
+          141.72003718762195,
+          379
+        ],
+        [
+          143.07669691707045,
+          378
+        ],
+        [
+          144.1775293832515,
+          381
+        ],
+        [
+          144.2860621616074,
+          391
+        ],
+        [
+          142.98366882133683,
+          394
+        ],
+        [
+          141.7898082594222,
+          395
+        ]
+      ],
+      "deselected_pixels": [],
+      "pixels": [
+        {
+          "theta": 142.4981689453125,
+          "distance (m)": 95375.0,
+          "altitude (m)": 3083.4474271573126,
+          "range_gate": 381,
+          "SUR/DOP": "SUR",
+          "reflectivity": 2.0,
+          "velocity": "",
+          "spectrum_width": "",
+          "diff_reflectivity": -0.6875,
+          "corr_coeff": 0.7049999833106995,
+          "diff_phase": 0.7051936984062195,
+          "timeR": 53841.973,
+          "timeV": 53841.973,
+          "timeD": 53841.973,
+          "lat": 38.81263513368898,
+          "lon": -120.96316781510573,
+          "utm_easting": 676845.1518381968,
+          "utm_northing": 4297955.489467363,
+          "utm_zone": 10,
+          "azimuthal_resolution": 0.9999700774721448,
+          "range_gate_spacing": 250.0
+        }
+      ]
+    }
+  ]
+}

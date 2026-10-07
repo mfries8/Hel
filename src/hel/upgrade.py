@@ -43,7 +43,8 @@ LAYOUTS: dict[str, tuple[str, ...]] = {
     ),
     "hel.radar": (
         "legacy",  # sweeps -> pixels with pixel_lat/pixel_long/... (74 of 76 surveyed)
-        "legacy_oldest",  # per-sweep date fields, theta/"distance (m)" pixels (2 of 76)
+        "legacy_oldest",  # per-sweep date fields, theta/"distance (m)" pixels (2 of 76;
+        # some also time each product group separately: timeR/timeV/timeD)
     ),
     "hel.seismo": ("loki-1.1",),  # Loki's own schema_version "1.1.0"
 }
@@ -339,6 +340,13 @@ _OLDEST_PIXEL_RENAMES: dict[str, str] = {
     "range_gate_spacing": "gate_size_m",
 }
 
+# Oldest layout, per-product-group times (seconds after midnight) -> contract key.
+_OLDEST_TIME_RENAMES: dict[str, str] = {
+    "timeR": "reflectivity_time",
+    "timeV": "velocity_time",
+    "timeD": "dual_pol_time",
+}
+
 # Oldest layout: sweep key -> contract key.
 _OLDEST_SWEEP_RENAMES: dict[str, str] = {
     "radar_elevation": "radar_altitude_m",
@@ -528,20 +536,47 @@ def _upgrade_oldest_pixel(
         if pixel.get(product) == "":
             del pixel[product]
             count(f"pixels: dropped empty product '{product}' (\"\" meant no value)")
-    seconds = pixel.get("reflectivity_time")
-    if date_info is not None and isinstance(seconds, int | float) and math.isfinite(seconds):
-        day, start_s, crosses = date_info
-        # A volume that crosses midnight has pixel times that wrap to small
-        # values; those belong to the next day.
-        if crosses and seconds < start_s:
-            day = day + timedelta(days=1)
-        whole_ms = round(seconds * 1000.0)
-        stamp = datetime.combine(day, time()) + timedelta(milliseconds=whole_ms)
-        text = stamp.strftime("%Y-%m-%dT%H:%M:%S")
-        if whole_ms % 1000:
-            text += f".{whole_ms % 1000:03d}"
-        pixel["reflectivity_time"] = text + "Z"
-        count("pixels: 'reflectivity_time' converted from seconds after midnight to UTC time")
+    # The very oldest exports timed each product group separately.
+    for old, new in _OLDEST_TIME_RENAMES.items():
+        if old not in pixel:
+            continue
+        if pixel[old] == "":
+            del pixel[old]
+            count(f"pixels: dropped empty '{old}' (\"\" meant no data)")
+        elif new not in pixel:
+            _rename(pixel, old, new, "pixels", [])
+            count(f"pixels: renamed '{old}' to '{new}'")
+    if date_info is None:
+        return
+    for key in _OLDEST_TIME_RENAMES.values():
+        seconds = pixel.get(key)
+        if isinstance(seconds, int | float) and math.isfinite(seconds):
+            pixel[key] = _seconds_to_utc(seconds, date_info)
+            count(f"pixels: '{key}' converted from seconds after midnight to UTC time")
+
+
+def _seconds_to_utc(seconds: float, date_info: tuple[date, float, bool]) -> str:
+    """Turn a legacy seconds-after-midnight time into an ISO UTC time.
+
+    Args:
+        seconds: Seconds after midnight UTC on the volume's date.
+        date_info: ``(volume date, volume start in seconds after midnight,
+            whether the volume crosses midnight)``.
+
+    Returns:
+        ISO 8601 ending in ``Z``, to the millisecond (the legacy precision).
+    """
+    day, start_s, crosses = date_info
+    # A volume that crosses midnight has pixel times that wrap to small
+    # values; those belong to the next day.
+    if crosses and seconds < start_s:
+        day = day + timedelta(days=1)
+    whole_ms = round(seconds * 1000.0)
+    stamp = datetime.combine(day, time()) + timedelta(milliseconds=whole_ms)
+    text = stamp.strftime("%Y-%m-%dT%H:%M:%S")
+    if whole_ms % 1000:
+        text += f".{whole_ms % 1000:03d}"
+    return text + "Z"
 
 
 # --- seismo.json -----------------------------------------------------------------
