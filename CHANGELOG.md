@@ -3,7 +3,7 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
-## 1.2.0 (unreleased)
+## 1.2.0 (2026-10-15)
 
 Contracts: `hel.event` 1.0, `hel.radar` 1.1, `hel.seismo` 1.1, `hel.results` 1.0.
 

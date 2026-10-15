@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Decisions
 
@@ -73,7 +73,7 @@ The field list was reviewed and approved by the maintainer on 2026-10-15
 - [x] Golden results files validate; a wrong contract name, an unknown MAJOR
       version, or a missing required field is rejected.
 - [x] `python tools/run_ci.py` passes.
-- [ ] Tagged `v1.2.0` after the maintainer's go-ahead.
+- [x] Tagged `v1.2.0` after the maintainer's go-ahead (2026-10-15).
 
 ## Verification Plan
 
@@ -109,7 +109,7 @@ The field list was reviewed and approved by the maintainer on 2026-10-15
 
 ## Follow-Up Work Discovered
 
-- Tag `v1.2.0` after the maintainer's go-ahead; Fenrir then syncs its pin.
+- None (tagged `v1.2.0`; Fenrir F-011b syncs its pin).
 
 ## Checks Skipped
 
