@@ -15,6 +15,7 @@ from hel import ContractValidationError
 from hel._base import check_contract_version
 from hel.event import EventDocument
 from hel.radar import PRODUCT_ALIASES, PRODUCTS, RadarDocument
+from hel.results import ResultsDocument
 from hel.seismo import SeismoDocument
 
 GOLDEN = Path(hel.__file__).parent / "golden"
@@ -205,3 +206,70 @@ def test_seismo_backfills_declination_from_elevation() -> None:
     assert isinstance(document, SeismoDocument)
     assert document.solution is not None
     assert document.solution.trajectory.travel_declination_deg == 35.0
+
+
+# --- hel.results --------------------------------------------------------------------
+
+
+def test_results_minimal_validates() -> None:
+    document, warnings = hel.validate(_golden("current", "results_minimal.json"))
+    assert isinstance(document, ResultsDocument)
+    assert warnings == []
+    assert document.forensics is None and document.search is None
+    assert document.blips[0].status == "solved"
+
+
+def test_results_load_through_the_upgrader_unchanged(tmp_path: Path) -> None:
+    path = tmp_path / "results.json"
+    path.write_text(json.dumps(_golden("current", "results_minimal.json")), encoding="utf-8")
+    loaded = hel.load(path)
+    assert loaded.contract == "hel.results"
+    assert loaded.upgrade.layout == "current" and loaded.upgrade.changes == []
+
+
+def test_results_round_trip_leaves_absent_fields_out() -> None:
+    data = _golden("current", "results_minimal.json")
+    document, _ = hel.validate(data)
+    assert json.loads(document.to_json()) == data
+
+
+@pytest.mark.parametrize(
+    ("path", "value"),
+    [
+        (("run", "analysis_mode"), "decadal_series"),
+        (("blips", 0, "status"), "Solved"),
+        (("terminus", "declination_deg"), 95.0),
+        (("contract_version",), "2.0"),
+    ],
+)
+def test_results_reject_bad_values(path: tuple[str | int, ...], value: object) -> None:
+    data = copy.deepcopy(_golden("current", "results_minimal.json"))
+    target: Any = data
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = value
+    with pytest.raises(ContractValidationError):
+        hel.validate(data)
+
+
+def test_results_require_the_fitted_terminus() -> None:
+    data = _golden("current", "results_minimal.json")
+    del data["terminus"]
+    with pytest.raises(ContractValidationError, match="terminus"):
+        hel.validate(data)
+
+
+def test_results_version_is_registered() -> None:
+    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.0"
+
+
+def test_results_full_example_validates() -> None:
+    # A real Park Forest Full Parameter Refinement run (Fenrir F-011b).
+    document, warnings = hel.validate(_golden("current", "results_full.json"))
+    assert isinstance(document, ResultsDocument)
+    assert warnings == []
+    assert document.run.analysis_mode == "full_parameter_refinement"
+    assert document.search is not None and len(document.search.scout_samples) == 250
+    assert document.forensics is not None and document.forensics.confidence is not None
+    statuses = {blip.status for blip in document.blips}
+    assert statuses == {"solved", "before_terminus"}

@@ -11,6 +11,7 @@ units and reference direction; this page states the rules once.
 | `hel.event` | `event.json` | the analyst, tools | Fenrir, Loki | 1.0 |
 | `hel.radar` | `RADAR_*.json` | Gjallerhorn | Fenrir | 1.1 |
 | `hel.seismo` | `Loki_output/seismo.json` | Loki | Fenrir | 1.1 |
+| `hel.results` | `results.json` (a Fenrir run's outputs) | Fenrir | Fenrir's frontend, other apps | 1.0 |
 
 - Every file begins with `"contract": "hel.<name>"` and
   `"contract_version": "MAJOR.MINOR"`.
@@ -40,7 +41,11 @@ units and reference direction; this page states the rules once.
   - each radar product's unit is in `hel.radar.PRODUCTS`.
 - **Position:** latitude and longitude in decimal degrees, WGS84.
   Longitude is in [-180, 180].
-- **Altitude:** metres above mean sea level.
+- **Altitude:** metres above mean sea level, except in `hel.results`, where
+  every altitude is metres above the **WGS84 ellipsoid** (Fenrir D28: computed
+  in ellipsoidal height, shown to people above mean sea level, as hand-held
+  GPS units show it).
+- **Mass:** kilograms (`_kg`). Displays show grams below 1000 g (Fenrir D28).
 - **Azimuth:** degrees clockwise from true north. For a fireball or fragment,
   it is the **direction of travel**, not the radiant direction, which differs
   by 180°.

@@ -28,6 +28,7 @@ from pydantic.json_schema import GenerateJsonSchema
 
 from hel.event import EventDocument
 from hel.radar import RadarDocument
+from hel.results import ResultsDocument
 from hel.seismo import SeismoDocument
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +40,7 @@ DOCUMENTS: dict[str, type[BaseModel]] = {
     "event": EventDocument,
     "radar": RadarDocument,
     "seismo": SeismoDocument,
+    "results": ResultsDocument,
 }
 
 

@@ -1,0 +1,1610 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hel.results/1.0",
+  "title": "ResultsDocument",
+  "$defs": {
+    "AnalysisInputs": {
+      "additionalProperties": true,
+      "description": "What the analysis started from: the entered terminus and the material.\n\nThe terminus is the event's, with the run's overrides: the fixed terminus\nin Simple mode, the centre of the search otherwise.",
+      "properties": {
+        "time_utc": {
+          "description": "Terminus time (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "description": "Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Terminus altitude. Height above the WGS84 ellipsoid, metres.",
+          "type": "number"
+        },
+        "terminus_speed_mps": {
+          "description": "Terminus speed, m/s.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "azimuth_deg": {
+          "description": "Direction of travel, degrees clockwise from true north (not the radiant direction, which differs by 180 degrees).",
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "declination_deg": {
+          "description": "Trajectory angle below horizontal, degrees (90 = vertical).",
+          "maximum": 90.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "density_kg_m3": {
+          "description": "Bulk density entered, kg/m^3.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "k2_factor": {
+          "description": "Dielectric factor |K|^2 of the material (dimensionless).",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "shape_factor": {
+          "description": "Sphere-to-cube drag blend, 1 (sphere) to 2 (cube).",
+          "maximum": 2.0,
+          "minimum": 1.0,
+          "type": "number"
+        },
+        "pre_atmospheric_mass_kg": {
+          "description": "Pre-atmospheric mass, kg.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "mass_lost_pct": {
+          "description": "Share of the mass lost in bright flight, percent.",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "search_ranges": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRanges"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "altitude_m",
+        "terminus_speed_mps",
+        "azimuth_deg",
+        "declination_deg",
+        "density_kg_m3",
+        "k2_factor",
+        "shape_factor",
+        "pre_atmospheric_mass_kg",
+        "mass_lost_pct"
+      ],
+      "title": "AnalysisInputs",
+      "type": "object"
+    },
+    "BlipResult": {
+      "additionalProperties": true,
+      "description": "One radar blip: what was observed, and the fragment that explains it.",
+      "properties": {
+        "blip_id": {
+          "description": "Radar, sweep and index, e.g. 'KGRR_3_0'.",
+          "type": "string"
+        },
+        "label": {
+          "description": "Display name: radar, volume start HHMM, elevation (e.g. 'KGRR_0551_1.50').",
+          "type": "string"
+        },
+        "radar": {
+          "description": "Radar station identifier.",
+          "type": "string"
+        },
+        "sweep_number": {
+          "description": "Sweep number in its volume scan.",
+          "type": "integer"
+        },
+        "observed_time_utc": {
+          "description": "Reflectivity-weighted time of the blip (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "volume_scan_start_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Start of the sweep's volume scan (UTC)."
+        },
+        "volume_file_start_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Start of the radar file holding the sweep (UTC)."
+        },
+        "sweep_elevation": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Antenna elevation above horizontal, degrees."
+        },
+        "sweep_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sweep type, e.g. 'single' or 'doppler'."
+        },
+        "is_tdwr": {
+          "description": "True for a TDWR (C-band) station.",
+          "type": "boolean"
+        },
+        "vcp_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Volume coverage pattern."
+        },
+        "lat": {
+          "description": "Observed position. Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Observed position. Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Observed altitude. Height above the WGS84 ellipsoid, metres.",
+          "type": "number"
+        },
+        "range_to_radar_m": {
+          "description": "Distance from the radar, metres.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "reflectivity_dbz": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The blip's strongest pixel reflectivity, dBZ."
+        },
+        "z_min_dbz": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mean detection floor of the blip's pixels, dBZ (dBZ0 + 20 log10 of the range in km)."
+        },
+        "delta_z_db": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Largest margin of a pixel above its detection floor, dB."
+        },
+        "time_after_terminus_s": {
+          "description": "Observed time minus terminus time, s (negative before the terminus).",
+          "type": "number"
+        },
+        "status": {
+          "description": "'solved'; 'before_terminus' (observed before the terminus time); or 'solver_error'.",
+          "enum": [
+            "solved",
+            "before_terminus",
+            "solver_error"
+          ],
+          "type": "string"
+        },
+        "status_detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the blip was not solved."
+        },
+        "mass_kg": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Fitted fragment mass, kg (0 when not solved)."
+        },
+        "fragment_count": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Fragments of that mass the blip's reflectivity implies (dimensionless). Absent for Doppler sweeps and TDWR."
+        },
+        "fall_time_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Flight time from the terminus to the ground, s."
+        },
+        "time_residual_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Model arrival at the blip's altitude minus observed, s."
+        },
+        "distance_residual_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Horizontal miss at the blip's altitude, metres."
+        },
+        "fit_cost": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "(time residual / 2 s)^2 + (distance residual / 250 m)^2 (dimensionless)."
+        },
+        "crossing_utm_easting_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where the fitted mass crossed the blip's altitude: UTM easting, m."
+        },
+        "crossing_utm_northing_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "As crossing_utm_easting_m: UTM northing, m."
+        },
+        "landing_lat": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": -90.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Canonical landing site (radar-corrected; as calculated in Centerline Alignment, where an unsolved blip has none). Latitude, degrees north (WGS84)."
+        },
+        "landing_lon": {
+          "anyOf": [
+            {
+              "maximum": 180.0,
+              "minimum": -180.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "As landing_lat. Longitude, degrees east (WGS84)."
+        },
+        "radar_corrected_landing_lat": {
+          "description": "Landing flown on from the blip's observed position. Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "radar_corrected_landing_lon": {
+          "description": "As radar_corrected_landing_lat. Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "reverse": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReverseDiagnostic"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "blip_id",
+        "label",
+        "radar",
+        "sweep_number",
+        "observed_time_utc",
+        "is_tdwr",
+        "lat",
+        "lon",
+        "altitude_m",
+        "range_to_radar_m",
+        "time_after_terminus_s",
+        "status",
+        "radar_corrected_landing_lat",
+        "radar_corrected_landing_lon"
+      ],
+      "title": "BlipResult",
+      "type": "object"
+    },
+    "Confidence": {
+      "additionalProperties": true,
+      "description": "Informational confidence in the result (never gates a calculation).",
+      "properties": {
+        "score": {
+          "description": "Product of the factors, 0 to 1.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "tier": {
+          "description": "low < 0.2 <= medium < 0.5 <= high.",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "type": "string"
+        },
+        "n_blips": {
+          "description": "Blips with a landing site.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "n_radars": {
+          "description": "Radars counted.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "centerline_ssr_m2": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Squared cross-track misses of the landings, m^2."
+        },
+        "centerline_rmse_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Root-mean-square cross-track miss, metres."
+        },
+        "blip_count_factor": {
+          "description": "From the number of blips.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "spatial_consistency_factor": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "From the landings' scatter about the centreline."
+        },
+        "radar_diversity_factor": {
+          "description": "From the number of radars.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "score",
+        "tier",
+        "n_blips",
+        "n_radars",
+        "blip_count_factor",
+        "radar_diversity_factor"
+      ],
+      "title": "Confidence",
+      "type": "object"
+    },
+    "FittedTerminus": {
+      "additionalProperties": true,
+      "description": "The fitted terminus: where dark flight begins.",
+      "properties": {
+        "time_utc": {
+          "description": "Terminus time (UTC; not fitted).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "lat": {
+          "description": "Latitude, degrees north (WGS84).",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Longitude, degrees east (WGS84).",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "utm_zone": {
+          "description": "UTM zone of the fall.",
+          "maximum": 60,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "utm_northern": {
+          "description": "True for the northern-hemisphere UTM zone.",
+          "type": "boolean"
+        },
+        "utm_easting_m": {
+          "description": "UTM easting of the terminus, metres.",
+          "type": "number"
+        },
+        "utm_northing_m": {
+          "description": "UTM northing of the terminus, metres.",
+          "type": "number"
+        },
+        "altitude_m": {
+          "description": "Fitted altitude. Height above the WGS84 ellipsoid, metres.",
+          "type": "number"
+        },
+        "terminus_speed_mps": {
+          "description": "Terminus speed, m/s.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "azimuth_deg": {
+          "description": "Direction of travel, degrees clockwise from true north (not the radiant direction, which differs by 180 degrees).",
+          "maximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "declination_deg": {
+          "description": "Trajectory angle below horizontal, degrees (90 = vertical).",
+          "maximum": 90.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "density_kg_m3": {
+          "description": "Bulk density used for the masses, kg/m^3 (fitted in Full Parameter Refinement).",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "at_search_edge": {
+          "description": "Searched values that ended within 2% of their range's edge.",
+          "items": {
+            "enum": [
+              "lat",
+              "lon",
+              "altitude",
+              "azimuth",
+              "declination",
+              "speed",
+              "density"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "mean_blip_offset_east_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mean eastward offset of the blips from where the fitted path crossed their altitudes, metres."
+        },
+        "mean_blip_offset_north_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "As mean_blip_offset_east_m, northward, metres."
+        },
+        "offset_lat": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": -90.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The terminus moved by the mean offset. Latitude, degrees north (WGS84)."
+        },
+        "offset_lon": {
+          "anyOf": [
+            {
+              "maximum": 180.0,
+              "minimum": -180.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The terminus moved by the mean offset. Longitude, degrees east (WGS84)."
+        }
+      },
+      "required": [
+        "time_utc",
+        "lat",
+        "lon",
+        "utm_zone",
+        "utm_northern",
+        "utm_easting_m",
+        "utm_northing_m",
+        "altitude_m",
+        "terminus_speed_mps",
+        "azimuth_deg",
+        "declination_deg",
+        "density_kg_m3",
+        "at_search_edge"
+      ],
+      "title": "FittedTerminus",
+      "type": "object"
+    },
+    "Forensics": {
+      "additionalProperties": true,
+      "description": "What the solved masses add up to.",
+      "properties": {
+        "radar_total_mass_kg": {
+          "description": "Sum of mass times fragment count over valid blips, kg.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "findable_mass_kg": {
+          "description": "As radar_total_mass_kg, for fragments of 1 g and more, kg.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "global_total_mass_kg": {
+          "description": "Pre-atmospheric mass times (1 - loss), kg.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "power_law": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PowerLawFit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "rayleigh_fit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RegimeFit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mie_fit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RegimeFit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "transition_mass_kg": {
+          "description": "Rayleigh/Mie transition mass rho * lambda^3 / (6 pi^2) at S band, kg.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "empirical_transition_mass_kg": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where the two regime lines cross, kg."
+        },
+        "empirical_density_kg_m3": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The density that crossing implies, kg/m^3."
+        },
+        "empirical_transition_in_sample": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True when the crossing lies between the regimes' observed masses."
+        },
+        "largest_fragment_statistical_kg": {
+          "description": "Mass at which the power law reaches one fragment, kg (0 when the fit is poor).",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "largest_fragment_radar_budget_kg": {
+          "description": "Largest fragment for which the power law holds the radar total, kg.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "largest_fragment_global_budget_kg": {
+          "description": "Largest fragment for which the power law holds the global total, kg.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Confidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "radar_total_mass_kg",
+        "findable_mass_kg",
+        "global_total_mass_kg",
+        "transition_mass_kg",
+        "largest_fragment_statistical_kg",
+        "largest_fragment_radar_budget_kg",
+        "largest_fragment_global_budget_kg"
+      ],
+      "title": "Forensics",
+      "type": "object"
+    },
+    "OutputFiles": {
+      "additionalProperties": true,
+      "description": "The run's output files, as paths relative to the run folder.",
+      "properties": {
+        "full_kmz": {
+          "description": "The full science KMZ.",
+          "type": "string"
+        },
+        "contours_geojson": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Concentration contours (when the map layers were on)."
+        },
+        "legacy_results": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The legacy-layout results file (Phase 1)."
+        }
+      },
+      "required": [
+        "full_kmz"
+      ],
+      "title": "OutputFiles",
+      "type": "object"
+    },
+    "PowerLawFit": {
+      "additionalProperties": true,
+      "description": "Least-squares fit of log10 fragment count on log10 mass in grams.",
+      "properties": {
+        "slope_b": {
+          "description": "Slope b of N = k * m^b (m in grams).",
+          "type": "number"
+        },
+        "log10_intercept": {
+          "description": "log10 k (m in grams).",
+          "type": "number"
+        },
+        "slope_std_error": {
+          "description": "Standard error of the slope.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "r2": {
+          "description": "Coefficient of determination.",
+          "type": "number"
+        },
+        "r2_adjusted": {
+          "description": "R^2 adjusted for the fit's degrees of freedom.",
+          "type": "number"
+        },
+        "n_points": {
+          "description": "Blips in the fit.",
+          "minimum": 3,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "slope_b",
+        "log10_intercept",
+        "slope_std_error",
+        "r2",
+        "r2_adjusted",
+        "n_points"
+      ],
+      "title": "PowerLawFit",
+      "type": "object"
+    },
+    "RadarSweep": {
+      "additionalProperties": true,
+      "description": "One sweep of the radar file.",
+      "properties": {
+        "sweep_id": {
+          "description": "The blip identifier this sweep gives, e.g. 'KGRR_3_0'.",
+          "type": "string"
+        },
+        "radar": {
+          "description": "Radar station identifier.",
+          "type": "string"
+        },
+        "sweep_number": {
+          "description": "Sweep number in its volume scan.",
+          "type": "integer"
+        },
+        "volume_scan_start_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Start of the sweep's volume scan (UTC)."
+        },
+        "sweep_elevation": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Antenna elevation above horizontal, degrees."
+        },
+        "selected": {
+          "description": "True when the sweep was used in this run.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "sweep_id",
+        "radar",
+        "sweep_number",
+        "selected"
+      ],
+      "title": "RadarSweep",
+      "type": "object"
+    },
+    "RegimeFit": {
+      "additionalProperties": true,
+      "description": "A log10 count on log10 mass (grams) line for one scattering regime.",
+      "properties": {
+        "slope": {
+          "description": "Slope (m in grams).",
+          "type": "number"
+        },
+        "log10_intercept": {
+          "description": "Intercept (m in grams).",
+          "type": "number"
+        },
+        "r2": {
+          "description": "Coefficient of determination.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "slope",
+        "log10_intercept",
+        "r2"
+      ],
+      "title": "RegimeFit",
+      "type": "object"
+    },
+    "ResultsRunInfo": {
+      "additionalProperties": true,
+      "description": "Which run produced the file.",
+      "properties": {
+        "run_id": {
+          "description": "The run's folder identifier.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "generated_utc": {
+          "description": "When the file was written (UTC).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "fenrir_version": {
+          "description": "Version of Fenrir that wrote the file.",
+          "type": "string"
+        },
+        "analysis_mode": {
+          "description": "Fit mode: 'simple' (the entered terminus), 'algebraic_surrogate', 'centerline_alignment', or 'full_parameter_refinement' (all parameters fitted at once).",
+          "enum": [
+            "simple",
+            "algebraic_surrogate",
+            "centerline_alignment",
+            "full_parameter_refinement"
+          ],
+          "type": "string"
+        },
+        "wind_source": {
+          "description": "Wind data used, e.g. 'era5', 'raob' or 'raob_3_avg'.",
+          "type": "string"
+        },
+        "wind_data_flagged": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the wind data were flagged, when the analyst accepted flagged data."
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Random seed of the searches."
+        },
+        "anchor_blip_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Centerline Alignment's anchor blip, counted among the blips with a mass."
+        }
+      },
+      "required": [
+        "run_id",
+        "generated_utc",
+        "fenrir_version",
+        "analysis_mode",
+        "wind_source"
+      ],
+      "title": "ResultsRunInfo",
+      "type": "object"
+    },
+    "ReverseDiagnostic": {
+      "additionalProperties": true,
+      "description": "A blip's offset carried back to the terminus.\n\nThe fitted mass is flown from the terminus to the blip's altitude; the\nblip's horizontal offset from that crossing, moved to the terminus,\nshows where the terminus would sit to match this blip alone.",
+      "properties": {
+        "status": {
+          "description": "'ok', or why it is missing (e.g. 'missing_mass', 'crossing_state_unavailable').",
+          "type": "string"
+        },
+        "method": {
+          "description": "How it was computed, e.g. 'forward_offset_diagnostic'.",
+          "type": "string"
+        },
+        "reference_speed_mps": {
+          "description": "Terminus speed used, m/s.",
+          "type": "number"
+        },
+        "lat": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": -90.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latitude, degrees north (WGS84)."
+        },
+        "lon": {
+          "anyOf": [
+            {
+              "maximum": 180.0,
+              "minimum": -180.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Longitude, degrees east (WGS84)."
+        },
+        "altitude_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Height above the WGS84 ellipsoid, metres."
+        },
+        "distance_to_terminus_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Horizontal distance from the fitted terminus, metres."
+        },
+        "time_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Flight time from the terminus to the blip's altitude, s."
+        }
+      },
+      "required": [
+        "status",
+        "method",
+        "reference_speed_mps"
+      ],
+      "title": "ReverseDiagnostic",
+      "type": "object"
+    },
+    "ReverseOffsets": {
+      "additionalProperties": true,
+      "description": "Spread of the solved blips' reverse-diagnostic distances to the terminus.",
+      "properties": {
+        "median_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Median, metres."
+        },
+        "p90_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "90th percentile, metres."
+        },
+        "max_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Maximum, metres."
+        },
+        "success_count": {
+          "description": "Solved blips with a diagnostic.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "failed_count": {
+          "description": "Solved blips without one.",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "success_count",
+        "failed_count"
+      ],
+      "title": "ReverseOffsets",
+      "type": "object"
+    },
+    "ScatteringModel": {
+      "additionalProperties": true,
+      "description": "The fragment-count model's provenance.",
+      "properties": {
+        "name": {
+          "description": "Model identifier, e.g. 'rayleigh_geometric_optics_v1'.",
+          "type": "string"
+        },
+        "wavelength_m": {
+          "description": "Radar wavelength, metres.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "band": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Radar band, e.g. 'S'."
+        },
+        "k2_material": {
+          "description": "Dielectric factor |K|^2 of the material.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "k2_water": {
+          "description": "Dielectric factor |K|^2 of water.",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "wavelength_m",
+        "k2_material",
+        "k2_water"
+      ],
+      "title": "ScatteringModel",
+      "type": "object"
+    },
+    "SearchDiagnostics": {
+      "additionalProperties": true,
+      "description": "Full Parameter Refinement's search diagnostics.",
+      "properties": {
+        "parameters": {
+          "description": "Order of the values in every list below: UTM easting (m), UTM northing (m), altitude (m), azimuth (deg), declination (deg), density (kg/m^3), speed (m/s).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "scout_samples": {
+          "description": "The Latin-hypercube scout samples, one list per sample, in parameters order.",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "scout_costs": {
+          "description": "Each scout sample's spline cost, m^2 (summed squared misses).",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "sobol_first_order": {
+          "description": "First-order Sobol indices of the cost.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "sobol_total": {
+          "description": "Total-order Sobol indices of the cost.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "sobol_first_order_conf": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "95% confidence half-widths of sobol_first_order. From an unseeded bootstrap, so they differ from run to run."
+        },
+        "sobol_total_conf": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "As sobol_first_order_conf, for sobol_total."
+        }
+      },
+      "required": [
+        "parameters",
+        "scout_samples",
+        "scout_costs",
+        "sobol_first_order",
+        "sobol_total"
+      ],
+      "title": "SearchDiagnostics",
+      "type": "object"
+    },
+    "SearchRange": {
+      "additionalProperties": true,
+      "description": "How one value was searched.",
+      "properties": {
+        "centre": {
+          "description": "Centre of the search, in the value's unit.",
+          "type": "number"
+        },
+        "half_width": {
+          "description": "Searched \u00b1 this much, in the value's unit (0 when fixed).",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "fixed": {
+          "description": "True when the value was held fixed.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "centre",
+        "half_width",
+        "fixed"
+      ],
+      "title": "SearchRange",
+      "type": "object"
+    },
+    "SearchRanges": {
+      "additionalProperties": true,
+      "description": "How each value was searched (modes other than Simple).",
+      "properties": {
+        "lat": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "North-south position: centre and half-width as UTM northing, m."
+        },
+        "lon": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "East-west position: centre and half-width as UTM easting, m."
+        },
+        "altitude": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Altitude, m (ellipsoidal)."
+        },
+        "azimuth": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Azimuth, degrees."
+        },
+        "declination": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Declination, degrees."
+        },
+        "speed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Terminus speed, m/s."
+        },
+        "density": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Bulk density, kg/m^3 (centre: mid-range; half-width: half the range)."
+        }
+      },
+      "title": "SearchRanges",
+      "type": "object"
+    },
+    "WindLevel": {
+      "additionalProperties": true,
+      "description": "The wind at one altitude above the fitted terminus.",
+      "properties": {
+        "altitude_m": {
+          "description": "Height above the WGS84 ellipsoid, metres.",
+          "type": "number"
+        },
+        "east_mps": {
+          "description": "Eastward wind component (toward the east), m/s.",
+          "type": "number"
+        },
+        "north_mps": {
+          "description": "Northward wind component (toward the north), m/s.",
+          "type": "number"
+        },
+        "speed_mps": {
+          "description": "Horizontal wind speed, m/s.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "direction_from_deg": {
+          "description": "Direction the wind blows from, degrees clockwise from true north.",
+          "exclusiveMaximum": 360.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "altitude_m",
+        "east_mps",
+        "north_mps",
+        "speed_mps",
+        "direction_from_deg"
+      ],
+      "title": "WindLevel",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "A complete Fenrir results file.",
+  "properties": {
+    "contract": {
+      "const": "hel.results",
+      "description": "Contract name; always 'hel.results'.",
+      "type": "string"
+    },
+    "contract_version": {
+      "description": "Contract version, MAJOR.MINOR (e.g. '1.0').",
+      "type": "string"
+    },
+    "event_id": {
+      "description": "The fall's identifier, as in its event.json.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "run": {
+      "$ref": "#/$defs/ResultsRunInfo"
+    },
+    "inputs": {
+      "$ref": "#/$defs/AnalysisInputs"
+    },
+    "terminus": {
+      "$ref": "#/$defs/FittedTerminus"
+    },
+    "search": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SearchDiagnostics"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "radar_sweeps": {
+      "items": {
+        "$ref": "#/$defs/RadarSweep"
+      },
+      "type": "array"
+    },
+    "blips": {
+      "items": {
+        "$ref": "#/$defs/BlipResult"
+      },
+      "type": "array"
+    },
+    "forensics": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Forensics"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Absent when no blip was solved."
+    },
+    "reverse_offsets": {
+      "$ref": "#/$defs/ReverseOffsets"
+    },
+    "wind_profile": {
+      "description": "The wind above the fitted terminus, from the ground up, every 250 m.",
+      "items": {
+        "$ref": "#/$defs/WindLevel"
+      },
+      "type": "array"
+    },
+    "radar_detection_span_s": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Time from the first to the last sweep start in the radar file, s."
+    },
+    "scattering_model": {
+      "$ref": "#/$defs/ScatteringModel"
+    },
+    "files": {
+      "$ref": "#/$defs/OutputFiles"
+    }
+  },
+  "required": [
+    "contract",
+    "contract_version",
+    "event_id",
+    "run",
+    "inputs",
+    "terminus",
+    "radar_sweeps",
+    "blips",
+    "reverse_offsets",
+    "wind_profile",
+    "scattering_model",
+    "files"
+  ],
+  "type": "object"
+}

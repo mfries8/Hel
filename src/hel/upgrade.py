@@ -31,6 +31,7 @@ from typing import Any
 
 from hel import event as event_contract
 from hel import radar as radar_contract
+from hel import results as results_contract
 from hel import seismo as seismo_contract
 
 # The legacy layouts the upgrader converts, by contract.
@@ -93,16 +94,27 @@ def upgrade(data: Any) -> UpgradeResult:
     if not isinstance(data, dict):
         raise NotAContractFileError("not a JSON object, so not a Hel contract file")
     contract = data.get("contract")
-    if contract == event_contract.CONTRACT or "terminus" in data or "luminous_end" in data:
+    # A file's own header decides first; the layout hints below only identify
+    # legacy files, which have no header (a results file has a "terminus" too).
+    if contract == results_contract.CONTRACT:
+        # Results have no legacy layout to convert (Fenrir writes them current).
+        return UpgradeResult(results_contract.CONTRACT, "current", copy.deepcopy(data))
+    if contract == event_contract.CONTRACT:
         return upgrade_event(data)
-    if contract == radar_contract.CONTRACT or "sweeps" in data:
+    if contract == radar_contract.CONTRACT:
         return upgrade_radar(data)
-    if contract == seismo_contract.CONTRACT or "schema_version" in data:
+    if contract == seismo_contract.CONTRACT:
+        return upgrade_seismo(data)
+    if contract is None and ("terminus" in data or "luminous_end" in data):
+        return upgrade_event(data)
+    if contract is None and "sweeps" in data:
+        return upgrade_radar(data)
+    if contract is None and "schema_version" in data:
         return upgrade_seismo(data)
     keys = ", ".join(list(data)[:6]) or "none"
     raise NotAContractFileError(
         f"not a recognized Hel contract file (top-level keys: {keys}); "
-        "expected an event, radar or seismo file"
+        "expected an event, radar, seismo or results file"
     )
 
 

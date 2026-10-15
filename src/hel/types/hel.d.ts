@@ -598,6 +598,750 @@ export interface BlipUncertainty {
 }
 
 /**
+ * A complete Fenrir results file.
+ */
+export interface ResultsDocument {
+  /**
+   * Contract name; always 'hel.results'.
+   */
+  contract: "hel.results";
+  /**
+   * Contract version, MAJOR.MINOR (e.g. '1.0').
+   */
+  contract_version: string;
+  /**
+   * The fall's identifier, as in its event.json.
+   */
+  event_id: string;
+  run: ResultsRunInfo;
+  inputs: AnalysisInputs;
+  terminus: FittedTerminus;
+  search?: SearchDiagnostics | null;
+  radar_sweeps: RadarSweep[];
+  blips: BlipResult[];
+  /**
+   * Absent when no blip was solved.
+   */
+  forensics?: Forensics | null;
+  reverse_offsets: ReverseOffsets;
+  /**
+   * The wind above the fitted terminus, from the ground up, every 250 m.
+   */
+  wind_profile: WindLevel[];
+  /**
+   * Time from the first to the last sweep start in the radar file, s.
+   */
+  radar_detection_span_s?: number | null;
+  scattering_model: ScatteringModel;
+  files: OutputFiles;
+  [k: string]: unknown;
+}
+/**
+ * Which run produced the file.
+ */
+export interface ResultsRunInfo {
+  /**
+   * The run's folder identifier.
+   */
+  run_id: string;
+  /**
+   * When the file was written (UTC).
+   */
+  generated_utc: string;
+  /**
+   * Version of Fenrir that wrote the file.
+   */
+  fenrir_version: string;
+  /**
+   * Fit mode: 'simple' (the entered terminus), 'algebraic_surrogate', 'centerline_alignment', or 'full_parameter_refinement' (all parameters fitted at once).
+   */
+  analysis_mode:
+    "simple" | "algebraic_surrogate" | "centerline_alignment" | "full_parameter_refinement";
+  /**
+   * Wind data used, e.g. 'era5', 'raob' or 'raob_3_avg'.
+   */
+  wind_source: string;
+  /**
+   * Why the wind data were flagged, when the analyst accepted flagged data.
+   */
+  wind_data_flagged?: string | null;
+  /**
+   * Random seed of the searches.
+   */
+  seed?: number | null;
+  /**
+   * Centerline Alignment's anchor blip, counted among the blips with a mass.
+   */
+  anchor_blip_index?: number | null;
+  [k: string]: unknown;
+}
+/**
+ * What the analysis started from: the entered terminus and the material.
+ *
+ * The terminus is the event's, with the run's overrides: the fixed terminus
+ * in Simple mode, the centre of the search otherwise.
+ */
+export interface AnalysisInputs {
+  /**
+   * Terminus time (UTC).
+   */
+  time_utc: string;
+  /**
+   * Latitude, degrees north (WGS84).
+   */
+  lat: number;
+  /**
+   * Longitude, degrees east (WGS84).
+   */
+  lon: number;
+  /**
+   * Terminus altitude. Height above the WGS84 ellipsoid, metres.
+   */
+  altitude_m: number;
+  /**
+   * Terminus speed, m/s.
+   */
+  terminus_speed_mps: number;
+  /**
+   * Direction of travel, degrees clockwise from true north (not the radiant direction, which differs by 180 degrees).
+   */
+  azimuth_deg: number;
+  /**
+   * Trajectory angle below horizontal, degrees (90 = vertical).
+   */
+  declination_deg: number;
+  /**
+   * Bulk density entered, kg/m^3.
+   */
+  density_kg_m3: number;
+  /**
+   * Dielectric factor |K|^2 of the material (dimensionless).
+   */
+  k2_factor: number;
+  /**
+   * Sphere-to-cube drag blend, 1 (sphere) to 2 (cube).
+   */
+  shape_factor: number;
+  /**
+   * Pre-atmospheric mass, kg.
+   */
+  pre_atmospheric_mass_kg: number;
+  /**
+   * Share of the mass lost in bright flight, percent.
+   */
+  mass_lost_pct: number;
+  search_ranges?: SearchRanges | null;
+  [k: string]: unknown;
+}
+/**
+ * How each value was searched (modes other than Simple).
+ */
+export interface SearchRanges {
+  /**
+   * North-south position: centre and half-width as UTM northing, m.
+   */
+  lat?: SearchRange | null;
+  /**
+   * East-west position: centre and half-width as UTM easting, m.
+   */
+  lon?: SearchRange | null;
+  /**
+   * Altitude, m (ellipsoidal).
+   */
+  altitude?: SearchRange | null;
+  /**
+   * Azimuth, degrees.
+   */
+  azimuth?: SearchRange | null;
+  /**
+   * Declination, degrees.
+   */
+  declination?: SearchRange | null;
+  /**
+   * Terminus speed, m/s.
+   */
+  speed?: SearchRange | null;
+  /**
+   * Bulk density, kg/m^3 (centre: mid-range; half-width: half the range).
+   */
+  density?: SearchRange | null;
+  [k: string]: unknown;
+}
+/**
+ * How one value was searched.
+ */
+export interface SearchRange {
+  /**
+   * Centre of the search, in the value's unit.
+   */
+  centre: number;
+  /**
+   * Searched ± this much, in the value's unit (0 when fixed).
+   */
+  half_width: number;
+  /**
+   * True when the value was held fixed.
+   */
+  fixed: boolean;
+  [k: string]: unknown;
+}
+/**
+ * The fitted terminus: where dark flight begins.
+ */
+export interface FittedTerminus {
+  /**
+   * Terminus time (UTC; not fitted).
+   */
+  time_utc: string;
+  /**
+   * Latitude, degrees north (WGS84).
+   */
+  lat: number;
+  /**
+   * Longitude, degrees east (WGS84).
+   */
+  lon: number;
+  /**
+   * UTM zone of the fall.
+   */
+  utm_zone: number;
+  /**
+   * True for the northern-hemisphere UTM zone.
+   */
+  utm_northern: boolean;
+  /**
+   * UTM easting of the terminus, metres.
+   */
+  utm_easting_m: number;
+  /**
+   * UTM northing of the terminus, metres.
+   */
+  utm_northing_m: number;
+  /**
+   * Fitted altitude. Height above the WGS84 ellipsoid, metres.
+   */
+  altitude_m: number;
+  /**
+   * Terminus speed, m/s.
+   */
+  terminus_speed_mps: number;
+  /**
+   * Direction of travel, degrees clockwise from true north (not the radiant direction, which differs by 180 degrees).
+   */
+  azimuth_deg: number;
+  /**
+   * Trajectory angle below horizontal, degrees (90 = vertical).
+   */
+  declination_deg: number;
+  /**
+   * Bulk density used for the masses, kg/m^3 (fitted in Full Parameter Refinement).
+   */
+  density_kg_m3: number;
+  /**
+   * Searched values that ended within 2% of their range's edge.
+   */
+  at_search_edge: ("lat" | "lon" | "altitude" | "azimuth" | "declination" | "speed" | "density")[];
+  /**
+   * Mean eastward offset of the blips from where the fitted path crossed their altitudes, metres.
+   */
+  mean_blip_offset_east_m?: number | null;
+  /**
+   * As mean_blip_offset_east_m, northward, metres.
+   */
+  mean_blip_offset_north_m?: number | null;
+  /**
+   * The terminus moved by the mean offset. Latitude, degrees north (WGS84).
+   */
+  offset_lat?: number | null;
+  /**
+   * The terminus moved by the mean offset. Longitude, degrees east (WGS84).
+   */
+  offset_lon?: number | null;
+  [k: string]: unknown;
+}
+/**
+ * Full Parameter Refinement's search diagnostics.
+ */
+export interface SearchDiagnostics {
+  /**
+   * Order of the values in every list below: UTM easting (m), UTM northing (m), altitude (m), azimuth (deg), declination (deg), density (kg/m^3), speed (m/s).
+   */
+  parameters: string[];
+  /**
+   * The Latin-hypercube scout samples, one list per sample, in parameters order.
+   */
+  scout_samples: number[][];
+  /**
+   * Each scout sample's spline cost, m^2 (summed squared misses).
+   */
+  scout_costs: number[];
+  /**
+   * First-order Sobol indices of the cost.
+   */
+  sobol_first_order: number[];
+  /**
+   * Total-order Sobol indices of the cost.
+   */
+  sobol_total: number[];
+  /**
+   * 95% confidence half-widths of sobol_first_order. From an unseeded bootstrap, so they differ from run to run.
+   */
+  sobol_first_order_conf?: number[] | null;
+  /**
+   * As sobol_first_order_conf, for sobol_total.
+   */
+  sobol_total_conf?: number[] | null;
+  [k: string]: unknown;
+}
+/**
+ * One sweep of the radar file.
+ */
+export interface RadarSweep {
+  /**
+   * The blip identifier this sweep gives, e.g. 'KGRR_3_0'.
+   */
+  sweep_id: string;
+  /**
+   * Radar station identifier.
+   */
+  radar: string;
+  /**
+   * Sweep number in its volume scan.
+   */
+  sweep_number: number;
+  /**
+   * Start of the sweep's volume scan (UTC).
+   */
+  volume_scan_start_utc?: string | null;
+  /**
+   * Antenna elevation above horizontal, degrees.
+   */
+  sweep_elevation?: number | null;
+  /**
+   * True when the sweep was used in this run.
+   */
+  selected: boolean;
+  [k: string]: unknown;
+}
+/**
+ * One radar blip: what was observed, and the fragment that explains it.
+ */
+export interface BlipResult {
+  /**
+   * Radar, sweep and index, e.g. 'KGRR_3_0'.
+   */
+  blip_id: string;
+  /**
+   * Display name: radar, volume start HHMM, elevation (e.g. 'KGRR_0551_1.50').
+   */
+  label: string;
+  /**
+   * Radar station identifier.
+   */
+  radar: string;
+  /**
+   * Sweep number in its volume scan.
+   */
+  sweep_number: number;
+  /**
+   * Reflectivity-weighted time of the blip (UTC).
+   */
+  observed_time_utc: string;
+  /**
+   * Start of the sweep's volume scan (UTC).
+   */
+  volume_scan_start_utc?: string | null;
+  /**
+   * Start of the radar file holding the sweep (UTC).
+   */
+  volume_file_start_utc?: string | null;
+  /**
+   * Antenna elevation above horizontal, degrees.
+   */
+  sweep_elevation?: number | null;
+  /**
+   * Sweep type, e.g. 'single' or 'doppler'.
+   */
+  sweep_mode?: string | null;
+  /**
+   * True for a TDWR (C-band) station.
+   */
+  is_tdwr: boolean;
+  /**
+   * Volume coverage pattern.
+   */
+  vcp_mode?: string | null;
+  /**
+   * Observed position. Latitude, degrees north (WGS84).
+   */
+  lat: number;
+  /**
+   * Observed position. Longitude, degrees east (WGS84).
+   */
+  lon: number;
+  /**
+   * Observed altitude. Height above the WGS84 ellipsoid, metres.
+   */
+  altitude_m: number;
+  /**
+   * Distance from the radar, metres.
+   */
+  range_to_radar_m: number;
+  /**
+   * The blip's strongest pixel reflectivity, dBZ.
+   */
+  reflectivity_dbz?: number | null;
+  /**
+   * Mean detection floor of the blip's pixels, dBZ (dBZ0 + 20 log10 of the range in km).
+   */
+  z_min_dbz?: number | null;
+  /**
+   * Largest margin of a pixel above its detection floor, dB.
+   */
+  delta_z_db?: number | null;
+  /**
+   * Observed time minus terminus time, s (negative before the terminus).
+   */
+  time_after_terminus_s: number;
+  /**
+   * 'solved'; 'before_terminus' (observed before the terminus time); or 'solver_error'.
+   */
+  status: "solved" | "before_terminus" | "solver_error";
+  /**
+   * Why the blip was not solved.
+   */
+  status_detail?: string | null;
+  /**
+   * Fitted fragment mass, kg (0 when not solved).
+   */
+  mass_kg?: number | null;
+  /**
+   * Fragments of that mass the blip's reflectivity implies (dimensionless). Absent for Doppler sweeps and TDWR.
+   */
+  fragment_count?: number | null;
+  /**
+   * Flight time from the terminus to the ground, s.
+   */
+  fall_time_s?: number | null;
+  /**
+   * Model arrival at the blip's altitude minus observed, s.
+   */
+  time_residual_s?: number | null;
+  /**
+   * Horizontal miss at the blip's altitude, metres.
+   */
+  distance_residual_m?: number | null;
+  /**
+   * (time residual / 2 s)^2 + (distance residual / 250 m)^2 (dimensionless).
+   */
+  fit_cost?: number | null;
+  /**
+   * Where the fitted mass crossed the blip's altitude: UTM easting, m.
+   */
+  crossing_utm_easting_m?: number | null;
+  /**
+   * As crossing_utm_easting_m: UTM northing, m.
+   */
+  crossing_utm_northing_m?: number | null;
+  /**
+   * Canonical landing site (radar-corrected; as calculated in Centerline Alignment, where an unsolved blip has none). Latitude, degrees north (WGS84).
+   */
+  landing_lat?: number | null;
+  /**
+   * As landing_lat. Longitude, degrees east (WGS84).
+   */
+  landing_lon?: number | null;
+  /**
+   * Landing flown on from the blip's observed position. Latitude, degrees north (WGS84).
+   */
+  radar_corrected_landing_lat: number;
+  /**
+   * As radar_corrected_landing_lat. Longitude, degrees east (WGS84).
+   */
+  radar_corrected_landing_lon: number;
+  reverse?: ReverseDiagnostic | null;
+  [k: string]: unknown;
+}
+/**
+ * A blip's offset carried back to the terminus.
+ *
+ * The fitted mass is flown from the terminus to the blip's altitude; the
+ * blip's horizontal offset from that crossing, moved to the terminus,
+ * shows where the terminus would sit to match this blip alone.
+ */
+export interface ReverseDiagnostic {
+  /**
+   * 'ok', or why it is missing (e.g. 'missing_mass', 'crossing_state_unavailable').
+   */
+  status: string;
+  /**
+   * How it was computed, e.g. 'forward_offset_diagnostic'.
+   */
+  method: string;
+  /**
+   * Terminus speed used, m/s.
+   */
+  reference_speed_mps: number;
+  /**
+   * Latitude, degrees north (WGS84).
+   */
+  lat?: number | null;
+  /**
+   * Longitude, degrees east (WGS84).
+   */
+  lon?: number | null;
+  /**
+   * Height above the WGS84 ellipsoid, metres.
+   */
+  altitude_m?: number | null;
+  /**
+   * Horizontal distance from the fitted terminus, metres.
+   */
+  distance_to_terminus_m?: number | null;
+  /**
+   * Flight time from the terminus to the blip's altitude, s.
+   */
+  time_s?: number | null;
+  [k: string]: unknown;
+}
+/**
+ * What the solved masses add up to.
+ */
+export interface Forensics {
+  /**
+   * Sum of mass times fragment count over valid blips, kg.
+   */
+  radar_total_mass_kg: number;
+  /**
+   * As radar_total_mass_kg, for fragments of 1 g and more, kg.
+   */
+  findable_mass_kg: number;
+  /**
+   * Pre-atmospheric mass times (1 - loss), kg.
+   */
+  global_total_mass_kg: number;
+  power_law?: PowerLawFit | null;
+  rayleigh_fit?: RegimeFit | null;
+  mie_fit?: RegimeFit | null;
+  /**
+   * Rayleigh/Mie transition mass rho * lambda^3 / (6 pi^2) at S band, kg.
+   */
+  transition_mass_kg: number;
+  /**
+   * Where the two regime lines cross, kg.
+   */
+  empirical_transition_mass_kg?: number | null;
+  /**
+   * The density that crossing implies, kg/m^3.
+   */
+  empirical_density_kg_m3?: number | null;
+  /**
+   * True when the crossing lies between the regimes' observed masses.
+   */
+  empirical_transition_in_sample?: boolean | null;
+  /**
+   * Mass at which the power law reaches one fragment, kg (0 when the fit is poor).
+   */
+  largest_fragment_statistical_kg: number;
+  /**
+   * Largest fragment for which the power law holds the radar total, kg.
+   */
+  largest_fragment_radar_budget_kg: number;
+  /**
+   * Largest fragment for which the power law holds the global total, kg.
+   */
+  largest_fragment_global_budget_kg: number;
+  confidence?: Confidence | null;
+  [k: string]: unknown;
+}
+/**
+ * Least-squares fit of log10 fragment count on log10 mass in grams.
+ */
+export interface PowerLawFit {
+  /**
+   * Slope b of N = k * m^b (m in grams).
+   */
+  slope_b: number;
+  /**
+   * log10 k (m in grams).
+   */
+  log10_intercept: number;
+  /**
+   * Standard error of the slope.
+   */
+  slope_std_error: number;
+  /**
+   * Coefficient of determination.
+   */
+  r2: number;
+  /**
+   * R^2 adjusted for the fit's degrees of freedom.
+   */
+  r2_adjusted: number;
+  /**
+   * Blips in the fit.
+   */
+  n_points: number;
+  [k: string]: unknown;
+}
+/**
+ * A log10 count on log10 mass (grams) line for one scattering regime.
+ */
+export interface RegimeFit {
+  /**
+   * Slope (m in grams).
+   */
+  slope: number;
+  /**
+   * Intercept (m in grams).
+   */
+  log10_intercept: number;
+  /**
+   * Coefficient of determination.
+   */
+  r2: number;
+  [k: string]: unknown;
+}
+/**
+ * Informational confidence in the result (never gates a calculation).
+ */
+export interface Confidence {
+  /**
+   * Product of the factors, 0 to 1.
+   */
+  score: number;
+  /**
+   * low < 0.2 <= medium < 0.5 <= high.
+   */
+  tier: "low" | "medium" | "high";
+  /**
+   * Blips with a landing site.
+   */
+  n_blips: number;
+  /**
+   * Radars counted.
+   */
+  n_radars: number;
+  /**
+   * Squared cross-track misses of the landings, m^2.
+   */
+  centerline_ssr_m2?: number | null;
+  /**
+   * Root-mean-square cross-track miss, metres.
+   */
+  centerline_rmse_m?: number | null;
+  /**
+   * From the number of blips.
+   */
+  blip_count_factor: number;
+  /**
+   * From the landings' scatter about the centreline.
+   */
+  spatial_consistency_factor?: number | null;
+  /**
+   * From the number of radars.
+   */
+  radar_diversity_factor: number;
+  [k: string]: unknown;
+}
+/**
+ * Spread of the solved blips' reverse-diagnostic distances to the terminus.
+ */
+export interface ReverseOffsets {
+  /**
+   * Median, metres.
+   */
+  median_m?: number | null;
+  /**
+   * 90th percentile, metres.
+   */
+  p90_m?: number | null;
+  /**
+   * Maximum, metres.
+   */
+  max_m?: number | null;
+  /**
+   * Solved blips with a diagnostic.
+   */
+  success_count: number;
+  /**
+   * Solved blips without one.
+   */
+  failed_count: number;
+  [k: string]: unknown;
+}
+/**
+ * The wind at one altitude above the fitted terminus.
+ */
+export interface WindLevel {
+  /**
+   * Height above the WGS84 ellipsoid, metres.
+   */
+  altitude_m: number;
+  /**
+   * Eastward wind component (toward the east), m/s.
+   */
+  east_mps: number;
+  /**
+   * Northward wind component (toward the north), m/s.
+   */
+  north_mps: number;
+  /**
+   * Horizontal wind speed, m/s.
+   */
+  speed_mps: number;
+  /**
+   * Direction the wind blows from, degrees clockwise from true north.
+   */
+  direction_from_deg: number;
+  [k: string]: unknown;
+}
+/**
+ * The fragment-count model's provenance.
+ */
+export interface ScatteringModel {
+  /**
+   * Model identifier, e.g. 'rayleigh_geometric_optics_v1'.
+   */
+  name: string;
+  /**
+   * Radar wavelength, metres.
+   */
+  wavelength_m: number;
+  /**
+   * Radar band, e.g. 'S'.
+   */
+  band?: string | null;
+  /**
+   * Dielectric factor |K|^2 of the material.
+   */
+  k2_material: number;
+  /**
+   * Dielectric factor |K|^2 of water.
+   */
+  k2_water: number;
+  [k: string]: unknown;
+}
+/**
+ * The run's output files, as paths relative to the run folder.
+ */
+export interface OutputFiles {
+  /**
+   * The full science KMZ.
+   */
+  full_kmz: string;
+  /**
+   * Concentration contours (when the map layers were on).
+   */
+  contours_geojson?: string | null;
+  /**
+   * The legacy-layout results file (Phase 1).
+   */
+  legacy_results?: string | null;
+  [k: string]: unknown;
+}
+
+/**
  * A complete ``seismo.json`` file.
  */
 export interface SeismoDocument {

@@ -4,14 +4,14 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## In Progress
 
-- None.
+- `H-003` Fenrir results contract (`hel.results` 1.0), with Fenrir F-011b.
+  SPEC: [H-003](specs/H-003-results-contract.md)
 
 ## Ready
 
 - `H-002` Shared widget kit (Fenrir D11a), starting from Gjallerhorn's widget
   kit. Scheduled just before the first frontend that needs it (Gjallerhorn
   G-008 or Fenrir's frontend SPEC).
-- `H-003` Fenrir results contract, a MINOR version added with Fenrir F-011.
 
 ## Done
 

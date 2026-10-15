@@ -1,0 +1,93 @@
+{
+  "contract": "hel.results",
+  "contract_version": "1.0",
+  "event_id": "PF_2003",
+  "run": {
+    "run_id": "20261015T120000Z-simple-0a1b2c",
+    "generated_utc": "2026-10-15T12:00:00Z",
+    "fenrir_version": "0.0.1",
+    "analysis_mode": "simple",
+    "wind_source": "era5"
+  },
+  "inputs": {
+    "time_utc": "2003-03-27T05:50:26.4Z",
+    "lat": 41.46,
+    "lon": -87.73,
+    "altitude_m": 17966.0,
+    "terminus_speed_mps": 3000.0,
+    "azimuth_deg": 21.0,
+    "declination_deg": 61.0,
+    "density_kg_m3": 3400.0,
+    "k2_factor": 0.44,
+    "shape_factor": 1.5,
+    "pre_atmospheric_mass_kg": 1780.0,
+    "mass_lost_pct": 95.0
+  },
+  "terminus": {
+    "time_utc": "2003-03-27T05:50:26.4Z",
+    "lat": 41.46,
+    "lon": -87.73,
+    "utm_zone": 16,
+    "utm_northern": true,
+    "utm_easting_m": 439034.5,
+    "utm_northing_m": 4590080.6,
+    "altitude_m": 17966.0,
+    "terminus_speed_mps": 3000.0,
+    "azimuth_deg": 21.0,
+    "declination_deg": 61.0,
+    "density_kg_m3": 3400.0,
+    "at_search_edge": []
+  },
+  "radar_sweeps": [
+    {
+      "sweep_id": "KGRR_3_0",
+      "radar": "KGRR",
+      "sweep_number": 3,
+      "selected": true
+    }
+  ],
+  "blips": [
+    {
+      "blip_id": "KGRR_3_0",
+      "label": "KGRR_0551_1.50",
+      "radar": "KGRR",
+      "sweep_number": 3,
+      "observed_time_utc": "2003-03-27T05:51:55.462769Z",
+      "is_tdwr": false,
+      "lat": 41.4771,
+      "lon": -87.7083,
+      "altitude_m": 9762.2,
+      "range_to_radar_m": 238500.0,
+      "time_after_terminus_s": 89.062769,
+      "status": "solved",
+      "mass_kg": 0.020,
+      "landing_lat": 41.4636,
+      "landing_lon": -87.6587,
+      "radar_corrected_landing_lat": 41.4636,
+      "radar_corrected_landing_lon": -87.6587
+    }
+  ],
+  "reverse_offsets": {
+    "success_count": 0,
+    "failed_count": 0
+  },
+  "wind_profile": [
+    {
+      "altitude_m": -33.9,
+      "east_mps": -2.8,
+      "north_mps": 0.3,
+      "speed_mps": 2.8,
+      "direction_from_deg": 95.6
+    }
+  ],
+  "scattering_model": {
+    "name": "rayleigh_geometric_optics_v1",
+    "wavelength_m": 0.107,
+    "band": "S",
+    "k2_material": 0.44,
+    "k2_water": 0.93
+  },
+  "files": {
+    "full_kmz": "stages/06_outputs/full.kmz"
+  }
+}

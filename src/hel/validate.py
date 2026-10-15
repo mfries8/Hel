@@ -21,15 +21,20 @@ from pydantic import BaseModel, ValidationError
 
 from hel.event import EventDocument
 from hel.radar import RadarDocument
+from hel.results import ResultsDocument
 from hel.seismo import SeismoDocument
 from hel.upgrade import UpgradeResult, upgrade
 
-ContractDocument = EventDocument | RadarDocument | SeismoDocument
+ContractDocument = EventDocument | RadarDocument | SeismoDocument | ResultsDocument
 
-MODELS: dict[str, type[EventDocument] | type[RadarDocument] | type[SeismoDocument]] = {
+MODELS: dict[
+    str,
+    type[EventDocument] | type[RadarDocument] | type[SeismoDocument] | type[ResultsDocument],
+] = {
     "hel.event": EventDocument,
     "hel.radar": RadarDocument,
     "hel.seismo": SeismoDocument,
+    "hel.results": ResultsDocument,
 }
 
 # Unknown-field warnings stop after this many, so a file with the same unknown
@@ -123,7 +128,7 @@ def load(path: str | Path) -> Loaded:
     """Read, upgrade (if needed) and validate one contract file.
 
     Args:
-        path: Path to an event, radar or seismo JSON file.
+        path: Path to an event, radar, seismo or results JSON file.
 
     Returns:
         The validated file, its upgrade record and warnings.

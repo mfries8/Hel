@@ -3,6 +3,26 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.2.0 (unreleased)
+
+Contracts: `hel.event` 1.0, `hel.radar` 1.1, `hel.seismo` 1.1, `hel.results` 1.0.
+
+### Added
+
+- `hel.results` 1.0: Fenrir's results file (H-003, with Fenrir F-011b): the
+  run, the entered inputs, the fitted terminus, Full Parameter Refinement's
+  search diagnostics, the radar sweeps, every blip's mass, landing and
+  diagnostics, forensics, the wind profile and the output files. Altitudes
+  are heights above the WGS84 ellipsoid and masses kilograms (Fenrir D28).
+  Minimal and full (Park Forest) golden examples.
+
+### Changed
+
+- The upgrader dispatches on a file's own `contract` header before guessing
+  a legacy layout from its keys, so a results file (which has a `terminus`)
+  is not mistaken for a legacy event file. A file whose header names an
+  unknown contract is now rejected instead of being guessed from its keys.
+
 ## 1.1.0 (2026-10-06)
 
 Contracts: `hel.event` 1.0, `hel.radar` 1.1, `hel.seismo` 1.1.
