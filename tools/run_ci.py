@@ -12,6 +12,7 @@ New steps are added here, never in the workflow file alone.
 
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -20,6 +21,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Coverage bar (Fenrir D12).
 COVERAGE_FAIL_UNDER = 80
+
+# The widget kit's checks run its tools through Node directly (no npm
+# wrapper, so the same command works on Windows and Linux).
+NODE = shutil.which("node") or "node"
 
 STEPS: list[tuple[str, list[str]]] = [
     ("Repository rules (names, file sizes)", [sys.executable, "tools/check_repo_rules.py"]),
@@ -32,6 +37,14 @@ STEPS: list[tuple[str, list[str]]] = [
     (
         "Generated schemas and TypeScript types are current",
         [sys.executable, "tools/generate_artifacts.py", "--check"],
+    ),
+    (
+        "Widget kit type check (strict TypeScript)",
+        [NODE, "node_modules/typescript/bin/tsc", "-p", "widgets/tsconfig.json"],
+    ),
+    (
+        "Widget kit tests",
+        [NODE, "node_modules/vitest/vitest.mjs", "run", "--root", "widgets"],
     ),
     (
         "Pytest with coverage",

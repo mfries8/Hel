@@ -28,6 +28,8 @@ declination conventions, versioning) are in
   - `current/`: valid current files;
   - `legacy/`: real legacy files;
   - `upgraded/`: the exact output expected from each legacy file.
+- `widgets/`: the shared React widget kit and dark theme that each app's
+  frontend copies ([widgets/README.md](widgets/README.md)).
 
 ## Use
 

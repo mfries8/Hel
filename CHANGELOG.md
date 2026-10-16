@@ -3,6 +3,19 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.3.0 (unreleased)
+
+Contracts: unchanged (`hel.event` 1.0, `hel.radar` 1.1, `hel.seismo` 1.1,
+`hel.results` 1.0).
+
+### Added
+
+- The widget kit (H-002; `widgets/`): the suite's shared React components
+  and dark theme, started from the legacy radar app's components, with a
+  `hel-` class prefix and new `NumberInput`, `Tabs`, `Expander` and
+  `StatusPill`. Strict TypeScript and Vitest checks in `tools/run_ci.py`.
+  Apps copy `widgets/src/` from a tagged release and pin it.
+
 ## 1.2.0 (2026-10-15)
 
 Contracts: `hel.event` 1.0, `hel.radar` 1.1, `hel.seismo` 1.1, `hel.results` 1.0.

@@ -4,13 +4,12 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## In Progress
 
-- None.
+- `H-002` Shared widget kit (with Fenrir F-013).
+  SPEC: [H-002](specs/H-002-widget-kit.md)
 
 ## Ready
 
-- `H-002` Shared widget kit (Fenrir D11a), starting from Gjallerhorn's widget
-  kit. Scheduled just before the first frontend that needs it (Gjallerhorn
-  G-008 or Fenrir's frontend SPEC).
+- None.
 
 ## Done
 

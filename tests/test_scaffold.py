@@ -21,7 +21,7 @@ def _hash(word: str) -> str:
 
 
 def test_package_exposes_version() -> None:
-    assert hel.__version__ == "1.2.0"
+    assert hel.__version__ == "1.3.0"
 
 
 def test_normalize_word_folds_case_and_accents() -> None:

@@ -1,0 +1,682 @@
+/* Hel widget kit (H-002): the Yggdrasil suite's shared dark "glass" theme.
+   Theme tokens first, then the page layout (sidebar + main area), then each
+   component's styles. Every class carries the hel- prefix. */
+:root {
+  --bg-color: #0f172a;
+  --panel-bg: rgba(30, 41, 59, 0.7);
+  --sidebar-bg: rgba(22, 33, 58, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --accent: #8b5cf6;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --input-bg: rgba(15, 23, 42, 0.6);
+  --font-family: 'Inter', system-ui, sans-serif;
+  --sidebar-width: 21rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.15), transparent 25%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--primary);
+}
+
+code {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+p {
+  margin: 0;
+}
+
+/* -- layout ----------------------------------------------------------------- */
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px 20px 48px;
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 32px 48px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.app-offline {
+  max-width: 720px;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.hel-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.hel-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    flex-basis: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .main {
+    padding: 20px 16px 64px;
+  }
+  .hel-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -- text --------------------------------------------------------------------- */
+
+.hel-header {
+  margin: 4px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sidebar .hel-header {
+  font-size: 18px;
+}
+
+.hel-subheader {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.hel-caption {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: -6px;
+}
+
+.hel-text {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.hel-markdown p + p,
+.hel-markdown p + ol,
+.hel-markdown ol + p {
+  margin-top: 8px;
+}
+
+.hel-markdown ol {
+  margin: 4px 0 0;
+  padding-left: 22px;
+}
+
+.hel-divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 8px 0;
+}
+
+/* -- alerts, spinner, progress --------------------------------------------------- */
+
+.hel-alert {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  border: 1px solid;
+}
+.hel-alert-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  display: flex;
+}
+.hel-alert-info {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #bfdbfe;
+}
+.hel-alert-success {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #bbf7d0;
+}
+.hel-alert-warning {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fde68a;
+}
+.hel-alert-error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
+
+.hel-spinner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hel-progress {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.hel-progress-bar {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.2s;
+}
+
+/* -- widgets ----------------------------------------------------------------------- */
+
+.hel-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hel-label {
+  font-size: 13px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hel-help {
+  color: var(--text-muted);
+  display: inline-flex;
+  cursor: help;
+}
+
+.hel-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-main);
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  outline: none;
+  color-scheme: dark;
+}
+.hel-input:focus {
+  border-color: var(--primary);
+}
+.hel-input::placeholder {
+  color: rgba(148, 163, 184, 0.6);
+}
+select.hel-input option {
+  background: #1e293b;
+}
+
+.hel-radio {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hel-radio-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hel-radio-option,
+.hel-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.hel-radio-option input,
+.hel-checkbox input {
+  accent-color: var(--primary);
+  margin: 0;
+}
+
+.hel-slider {
+  width: 100%;
+  accent-color: var(--primary);
+  margin: 0;
+}
+.hel-slider-value {
+  font-size: 12px;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.hel-slider-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.hel-metric-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.hel-metric-value {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.hel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+/* -- buttons --------------------------------------------------------------------------- */
+
+.hel-button {
+  font-family: inherit;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s, opacity 0.15s;
+  align-self: flex-start;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hel-button.primary {
+  background: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+}
+.hel-button.primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+.hel-button.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--glass-border);
+}
+.hel-button.secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+}
+.hel-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.hel-icon-button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  border-radius: 4px;
+}
+.hel-icon-button:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* -- file uploader ----------------------------------------------------------------------- */
+
+.hel-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--input-bg);
+  border: 1px dashed var(--glass-border);
+}
+.hel-dropzone.drag-over {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.1);
+}
+.hel-dropzone .hel-button {
+  white-space: nowrap;
+}
+.hel-dropzone-icon {
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+.hel-dropzone-text {
+  flex: 1 1 auto;
+  font-size: 13px;
+  min-width: 0;
+}
+.hel-dropzone-text small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.hel-file-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 4px 4px 4px 8px;
+}
+.hel-file-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hel-file-chip small {
+  color: var(--text-muted);
+}
+
+/* -- tables, charts, containers ------------------------------------------------------------ */
+
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.data-table th,
+table.data-table td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+table.data-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  position: sticky;
+  top: 0;
+  background: #1a2540;
+}
+table.data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.table-scroll {
+  max-height: 360px;
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.hel-scroll-container {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hel-image {
+  max-width: 100%;
+  border-radius: 8px;
+  align-self: flex-start;
+}
+
+/* -- dialog + toast ------------------------------------------------------------------------ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-box {
+  background: #16213a;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  padding: 20px 24px 24px;
+  max-width: 500px;
+  width: calc(100% - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.modal-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.modal-title h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.modal-box p {
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.hel-toasts {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1100;
+}
+.hel-toast {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #1e293b;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  padding: 10px 14px;
+  font-size: 13px;
+  animation: toast-in 0.2s ease-out;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* -- tabs, expander, status pill, card ------------------------------------------------------ */
+
+.hel-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 12px;
+}
+
+.hel-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font: inherit;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.hel-tab:hover:not(:disabled) {
+  color: var(--text-main);
+}
+
+.hel-tab.active {
+  color: var(--text-main);
+  border-bottom-color: var(--primary);
+}
+
+.hel-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.hel-tab:focus-visible,
+.hel-expander-summary:focus-visible,
+.hel-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.hel-expander {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--panel-bg);
+}
+
+.hel-expander-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.hel-expander-body {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hel-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+}
+
+.hel-pill-neutral { color: var(--text-muted); }
+.hel-pill-running { color: #93c5fd; border-color: rgba(59, 130, 246, 0.5); }
+.hel-pill-success { color: #86efac; border-color: rgba(34, 197, 94, 0.5); }
+.hel-pill-warning { color: #fcd34d; border-color: rgba(245, 158, 11, 0.5); }
+.hel-pill-error { color: #fca5a5; border-color: rgba(239, 68, 68, 0.5); }
+
+.hel-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin,
+  .hel-toast {
+    animation: none;
+  }
+}

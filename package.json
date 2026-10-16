@@ -1,10 +1,23 @@
 {
-  "name": "hel-codegen",
+  "name": "hel-tooling",
   "private": true,
-  "description": "Generates Hel's TypeScript types from its JSON Schemas (tools/generate_artifacts.py).",
+  "description": "Hel's JavaScript tooling: TypeScript types from the JSON Schemas (tools/generate_artifacts.py) and the widget kit's checks (widgets/).",
   "type": "module",
+  "scripts": {
+    "widgets:typecheck": "tsc -p widgets/tsconfig.json",
+    "widgets:test": "vitest run --root widgets"
+  },
   "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "jsdom": "^27.4.0",
     "json-schema-to-typescript": "^15.0.4",
-    "typescript": "^5.9.3"
+    "lucide-react": "^1.57.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
   }
 }
