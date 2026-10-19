@@ -4,8 +4,7 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## In Progress
 
-- `H-002` Shared widget kit (with Fenrir F-013).
-  SPEC: [H-002](specs/H-002-widget-kit.md)
+- None.
 
 ## Ready
 
@@ -13,6 +12,8 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Done
 
+- `H-002` Shared widget kit (released in v1.3.0; Fenrir F-013a pins it).
+  Archive: [H-002](specs/done/H-002-widget-kit.md)
 - `H-003` Fenrir results contract, `hel.results` 1.0 (released in v1.2.0).
   Archive: [H-003](specs/done/H-003-results-contract.md)
 - `H-001` Hel v1: the event, radar and seismo contracts, conventions,

@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Decisions
 
@@ -52,11 +52,11 @@ follows.
 
 ## Acceptance Criteria
 
-- [ ] Every component type-checks under strict TypeScript and has a test of
+- [x] Every component type-checks under strict TypeScript and has a test of
       its behaviour (rendering, input, events).
-- [ ] No predecessor name appears anywhere in the kit.
-- [ ] `python tools/run_ci.py` runs the widget checks and passes.
-- [ ] Tagged after the maintainer's go-ahead; Fenrir pins the tag.
+- [x] No predecessor name appears anywhere in the kit.
+- [x] `python tools/run_ci.py` runs the widget checks and passes.
+- [x] Tagged `v1.3.0` after the maintainer's go-ahead (2026-10-19); Fenrir pins the tag.
 
 ## Verification Plan
 
