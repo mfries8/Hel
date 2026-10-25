@@ -3,6 +3,16 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.4.2 (2026-10-25)
+
+Contracts: as 1.4.0 (`hel.results` 1.1); the files are unchanged.
+
+### Fixed
+
+- `uncertainty.regions[].outlines` is typed as lists of `[lat, lon]` lists
+  instead of tuples: generated TypeScript clients typed the same field as a
+  tuple in one place and an array in another (found in Fenrir F-025b).
+
 ## 1.4.1 (2026-10-25)
 
 Contracts: as 1.4.0 (`hel.results` 1.1).

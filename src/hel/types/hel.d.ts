@@ -1535,9 +1535,9 @@ export interface ProbabilityRegion {
    */
   area_km2: number;
   /**
-   * Its outlines, each a list of (latitude, longitude) points, degrees.
+   * Its outlines, each a list of [latitude, longitude] points, degrees (plain lists, not tuples, so generated clients agree on the type).
    */
-  outlines: [unknown, unknown][][];
+  outlines: number[][][];
   [k: string]: unknown;
 }
 /**

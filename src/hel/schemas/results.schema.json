@@ -1126,19 +1126,12 @@
           "type": "number"
         },
         "outlines": {
-          "description": "Its outlines, each a list of (latitude, longitude) points, degrees.",
+          "description": "Its outlines, each a list of [latitude, longitude] points, degrees (plain lists, not tuples, so generated clients agree on the type).",
           "items": {
             "items": {
-              "maxItems": 2,
-              "minItems": 2,
-              "prefixItems": [
-                {
-                  "type": "number"
-                },
-                {
-                  "type": "number"
-                }
-              ],
+              "items": {
+                "type": "number"
+              },
               "type": "array"
             },
             "type": "array"

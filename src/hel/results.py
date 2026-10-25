@@ -519,8 +519,11 @@ class ProbabilityRegion(HelModel):
     mass_class: str = Field(description="The decadal mass class, or 'fall' for all blips.")
     probability: float = Field(gt=0.0, lt=1.0, description="The probability it holds, 0-1.")
     area_km2: float = Field(ge=0.0, description="Its area, km^2.")
-    outlines: list[list[tuple[float, float]]] = Field(
-        description="Its outlines, each a list of (latitude, longitude) points, degrees."
+    outlines: list[list[list[float]]] = Field(
+        description=(
+            "Its outlines, each a list of [latitude, longitude] points, degrees (plain "
+            "lists, not tuples, so generated clients agree on the type)."
+        )
     )
 
 

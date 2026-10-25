@@ -70,7 +70,8 @@ held back for the same reason.
 
 ## Follow-Up Work Discovered
 
-- None
+- 1.4.2: `outlines` as lists rather than tuples, for generated clients
+  (Fenrir F-025b's frontend type check).
 
 ## Checks Skipped
 
