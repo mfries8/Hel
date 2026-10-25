@@ -3,6 +3,15 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.4.1 (2026-10-25)
+
+Contracts: as 1.4.0 (`hel.results` 1.1).
+
+### Fixed
+
+- The package-version test, left at 1.3.0 in the 1.4.0 release (its CI
+  failed on that test alone; the contracts are unchanged). Apps pin 1.4.1.
+
 ## 1.4.0 (2026-10-25)
 
 Contracts: `hel.results` 1.1 (`hel.event` 1.0, `hel.radar` 1.1, `hel.seismo`

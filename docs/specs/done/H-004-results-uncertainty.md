@@ -63,7 +63,10 @@ held back for the same reason.
 
 ## Deviations
 
-- None
+- **Released as 1.4.1**: v1.4.0 was tagged and pushed with the
+  package-version test still expecting 1.3.0 (its CI failed on that test
+  alone; the release command did not stop on the failure). 1.4.1 fixes the
+  test; the contracts are the same.
 
 ## Follow-Up Work Discovered
 
