@@ -634,6 +634,10 @@ export interface ResultsDocument {
   radar_detection_span_s?: number | null;
   scattering_model: ScatteringModel;
   files: OutputFiles;
+  /**
+   * Level 1 probability areas (1.1); absent when not computed.
+   */
+  uncertainty?: Uncertainty | null;
   [k: string]: unknown;
 }
 /**
@@ -891,6 +895,14 @@ export interface SearchDiagnostics {
    * As sobol_first_order_conf, for sobol_total.
    */
   sobol_total_conf?: number[] | null;
+  /**
+   * The search's cost (1.1): 'legacy' (the spline cost), 'direct' (each blip's nearest mass solved, optionally with blip times) or 'weighted' (in units of each blip's uncertainty). Absent: legacy.
+   */
+  cost?: ("legacy" | "direct" | "weighted") | null;
+  /**
+   * Blips lying behind the fitted terminus's direction of travel, horizontally (1.1): reported, not penalized, by the direct and weighted costs.
+   */
+  blips_behind_terminus?: number | null;
   [k: string]: unknown;
 }
 /**
@@ -1338,6 +1350,226 @@ export interface OutputFiles {
    * The legacy-layout results file (Phase 1).
    */
   legacy_results?: string | null;
+  /**
+   * The probability areas for Google Earth (1.1).
+   */
+  uncertainty_kmz?: string | null;
+  /**
+   * The probability areas (1.1).
+   */
+  areas_geojson?: string | null;
+  [k: string]: unknown;
+}
+/**
+ * Level 1 probability areas, search grid and error tables (1.1; Fenrir D19, D5a).
+ */
+export interface Uncertainty {
+  /**
+   * How they were computed.
+   */
+  method: string;
+  /**
+   * Monte Carlo samples.
+   */
+  samples: number;
+  /**
+   * The calibration factor applied to the areas' linear size (1: none).
+   */
+  area_scale?: number;
+  fit_quality: UncertaintyFitQuality;
+  parameters: ParameterUncertainty[];
+  /**
+   * The parameters' correlation matrix, in ``parameters`` order.
+   */
+  correlations: number[][];
+  error_table: MassClassErrors[];
+  blip_areas: BlipAreas[];
+  regions: ProbabilityRegion[];
+  search_grid?: SearchGrid | null;
+  /**
+   * Uncertainty sources sampled.
+   */
+  sources_included: string[];
+  /**
+   * Known sources not sampled.
+   */
+  sources_excluded: string[];
+  [k: string]: unknown;
+}
+/**
+ * How well the fit explains the blips (1.1).
+ */
+export interface UncertaintyFitQuality {
+  /**
+   * RMS residual per blip of the fit's cost (with blip times), m-equivalent.
+   */
+  residual_m: number;
+  /**
+   * RMS horizontal miss of the blips, m.
+   */
+  spatial_residual_m?: number | null;
+  /**
+   * Blips reached.
+   */
+  blips: number;
+  /**
+   * Parameters the search left free.
+   */
+  free_parameters: number;
+  [k: string]: unknown;
+}
+/**
+ * One fitted parameter's uncertainty (1.1).
+ */
+export interface ParameterUncertainty {
+  /**
+   * UTM easting (m), UTM northing (m), terminus height above sea level (m), azimuth (deg), declination (deg), density (kg/m^3) or speed (m/s).
+   */
+  name: "utm_e" | "utm_n" | "alt" | "az" | "dec" | "rho" | "v0";
+  /**
+   * The fitted value, in the name's unit.
+   */
+  value: number;
+  /**
+   * Its 1-sigma uncertainty, in the name's unit.
+   */
+  sigma: number;
+  /**
+   * True when the blips do not constrain it and sigma is the search half-range.
+   */
+  capped_at_search_range: boolean;
+  [k: string]: unknown;
+}
+/**
+ * The error table's row for one decadal mass class (1.1; Fenrir D5a draft).
+ */
+export interface MassClassErrors {
+  /**
+   * The decadal mass class, e.g. '10 g-100 g'.
+   */
+  mass_class: string;
+  /**
+   * Blips in the class.
+   */
+  blips: number;
+  /**
+   * Median 1-sigma landing error along the direction of travel, m.
+   */
+  along_track_sigma_m: number;
+  /**
+   * Median 1-sigma landing error across the direction of travel, m.
+   */
+  cross_track_sigma_m: number;
+  /**
+   * Its 50 % region, km^2.
+   */
+  area_50_km2?: number | null;
+  /**
+   * Its 90 % region, km^2.
+   */
+  area_90_km2?: number | null;
+  [k: string]: unknown;
+}
+/**
+ * One blip's landing areas (1.1).
+ */
+export interface BlipAreas {
+  /**
+   * The blip, as in ``blips``.
+   */
+  blip_id: string;
+  /**
+   * Its decadal mass class, e.g. '10 g-100 g'.
+   */
+  mass_class: string;
+  /**
+   * Its areas, by probability.
+   */
+  areas: ProbabilityEllipse[];
+  [k: string]: unknown;
+}
+/**
+ * An area holding a probability of a blip's fragment landing (1.1).
+ */
+export interface ProbabilityEllipse {
+  /**
+   * The probability it holds, 0-1.
+   */
+  probability: number;
+  /**
+   * Centre latitude, degrees north.
+   */
+  lat: number;
+  /**
+   * Centre longitude, degrees east.
+   */
+  lon: number;
+  /**
+   * Semi-major axis, m.
+   */
+  semi_major_m: number;
+  /**
+   * Semi-minor axis, m.
+   */
+  semi_minor_m: number;
+  /**
+   * The major axis's direction, degrees clockwise from true north.
+   */
+  major_azimuth_deg: number;
+  [k: string]: unknown;
+}
+/**
+ * A highest-density region holding a probability, for a mass class or the fall (1.1).
+ */
+export interface ProbabilityRegion {
+  /**
+   * The decadal mass class, or 'fall' for all blips.
+   */
+  mass_class: string;
+  /**
+   * The probability it holds, 0-1.
+   */
+  probability: number;
+  /**
+   * Its area, km^2.
+   */
+  area_km2: number;
+  /**
+   * Its outlines, each a list of (latitude, longitude) points, degrees.
+   */
+  outlines: [unknown, unknown][][];
+  [k: string]: unknown;
+}
+/**
+ * Where to search, cell by cell (1.1): the cells of the fall's 90 % region.
+ */
+export interface SearchGrid {
+  /**
+   * Cell size, m (square, in UTM).
+   */
+  cell_m: number;
+  /**
+   * The cells, most probable first.
+   */
+  cells: SearchGridCell[];
+  [k: string]: unknown;
+}
+/**
+ * One search-grid cell (1.1).
+ */
+export interface SearchGridCell {
+  /**
+   * Cell centre latitude, degrees north.
+   */
+  lat: number;
+  /**
+   * Cell centre longitude, degrees east.
+   */
+  lon: number;
+  /**
+   * The cell's share of the fall's landings, 0-1.
+   */
+  probability: number;
   [k: string]: unknown;
 }
 

@@ -1,6 +1,6 @@
 {
   "contract": "hel.results",
-  "contract_version": "1.0",
+  "contract_version": "1.1",
   "event_id": "PF_2003",
   "run": {
     "run_id": "20261015T120000Z-full_parameter_refinement-example",
@@ -2629,7 +2629,9 @@
       0.004082064620168877,
       1.827472114015512e-13,
       3.9864068849404164e-07
-    ]
+    ],
+    "cost": "direct",
+    "blips_behind_terminus": 0
   },
   "radar_sweeps": [
     {
@@ -3827,6 +3829,207 @@
   },
   "files": {
     "full_kmz": "stages/06_outputs/full.kmz",
-    "legacy_results": "stages/06_outputs/legacy_results.json"
+    "legacy_results": "stages/06_outputs/legacy_results.json",
+    "uncertainty_kmz": "stages/07_uncertainty/uncertainty.kmz",
+    "areas_geojson": "stages/07_uncertainty/areas.geojson"
+  },
+  "uncertainty": {
+    "method": "Level 1 (D19): fit curvature, then Monte Carlo",
+    "samples": 200,
+    "area_scale": 1.0,
+    "fit_quality": {
+      "residual_m": 160.0,
+      "spatial_residual_m": 140.0,
+      "blips": 30,
+      "free_parameters": 5
+    },
+    "parameters": [
+      {
+        "name": "utm_e",
+        "value": 523063.6,
+        "sigma": 410.0,
+        "capped_at_search_range": false
+      },
+      {
+        "name": "utm_n",
+        "value": 4334460.4,
+        "sigma": 380.0,
+        "capped_at_search_range": false
+      },
+      {
+        "name": "alt",
+        "value": 31660.0,
+        "sigma": 900.0,
+        "capped_at_search_range": false
+      },
+      {
+        "name": "az",
+        "value": 176.1,
+        "sigma": 1.2,
+        "capped_at_search_range": false
+      },
+      {
+        "name": "dec",
+        "value": 40.7,
+        "sigma": 1.5,
+        "capped_at_search_range": false
+      },
+      {
+        "name": "rho",
+        "value": 3400.0,
+        "sigma": 0.0,
+        "capped_at_search_range": false
+      },
+      {
+        "name": "v0",
+        "value": 3000.0,
+        "sigma": 0.0,
+        "capped_at_search_range": false
+      }
+    ],
+    "correlations": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "error_table": [
+      {
+        "mass_class": "10 g-100 g",
+        "blips": 12,
+        "along_track_sigma_m": 310.0,
+        "cross_track_sigma_m": 190.0,
+        "area_50_km2": 0.8,
+        "area_90_km2": 2.4
+      }
+    ],
+    "blip_areas": [
+      {
+        "blip_id": "KGRR_3_0",
+        "mass_class": "10 g-100 g",
+        "areas": [
+          {
+            "probability": 0.5,
+            "lat": 41.46,
+            "lon": -87.73,
+            "semi_major_m": 300.0,
+            "semi_minor_m": 180.0,
+            "major_azimuth_deg": 12.0
+          },
+          {
+            "probability": 0.9,
+            "lat": 41.46,
+            "lon": -87.73,
+            "semi_major_m": 560.0,
+            "semi_minor_m": 330.0,
+            "major_azimuth_deg": 12.0
+          }
+        ]
+      }
+    ],
+    "regions": [
+      {
+        "mass_class": "fall",
+        "probability": 0.9,
+        "area_km2": 3.6,
+        "outlines": [
+          [
+            [
+              41.46,
+              -87.73
+            ],
+            [
+              41.47,
+              -87.73
+            ],
+            [
+              41.47,
+              -87.72
+            ],
+            [
+              41.46,
+              -87.73
+            ]
+          ]
+        ]
+      }
+    ],
+    "search_grid": {
+      "cell_m": 70.0,
+      "cells": [
+        {
+          "lat": 41.46,
+          "lon": -87.73,
+          "probability": 0.004
+        }
+      ]
+    },
+    "sources_included": [
+      "terminus position and height",
+      "direction of travel",
+      "each blip's mass"
+    ],
+    "sources_excluded": [
+      "vertical wind"
+    ]
   }
 }

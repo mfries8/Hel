@@ -260,7 +260,20 @@ def test_results_require_the_fitted_terminus() -> None:
 
 
 def test_results_version_is_registered() -> None:
-    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.0"
+    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.1"
+
+
+def test_results_uncertainty_section() -> None:
+    # 1.1 (H-004): Level 1's probability areas; a 1.0 file stays valid without them.
+    document, warnings = hel.validate(_golden("current", "results_full.json"))
+    assert isinstance(document, ResultsDocument) and warnings == []
+    u = document.uncertainty
+    assert u is not None and u.samples == 200 and u.area_scale == 1.0
+    assert [a.probability for a in u.blip_areas[0].areas] == [0.5, 0.9]
+    assert u.regions[0].mass_class == "fall" and u.search_grid is not None
+    assert document.search is not None and document.search.cost == "direct"
+    minimal, _ = hel.validate(_golden("current", "results_minimal.json"))
+    assert isinstance(minimal, ResultsDocument) and minimal.uncertainty is None
 
 
 def test_results_full_example_validates() -> None:

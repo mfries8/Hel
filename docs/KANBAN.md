@@ -12,6 +12,9 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Done
 
+- `H-004` Probability areas in the results contract, `hel.results` 1.1
+  (released in v1.4.0; Fenrir F-025b writes them).
+  Archive: [H-004](specs/done/H-004-results-uncertainty.md)
 - `H-002` Shared widget kit (released in v1.3.0; Fenrir F-013a pins it).
   Archive: [H-002](specs/done/H-002-widget-kit.md)
 - `H-003` Fenrir results contract, `hel.results` 1.0 (released in v1.2.0).

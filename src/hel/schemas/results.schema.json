@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "hel.results/1.0",
+  "$id": "hel.results/1.1",
   "title": "ResultsDocument",
   "$defs": {
     "AnalysisInputs": {
@@ -99,6 +99,34 @@
         "mass_lost_pct"
       ],
       "title": "AnalysisInputs",
+      "type": "object"
+    },
+    "BlipAreas": {
+      "additionalProperties": true,
+      "description": "One blip's landing areas (1.1).",
+      "properties": {
+        "blip_id": {
+          "description": "The blip, as in ``blips``.",
+          "type": "string"
+        },
+        "mass_class": {
+          "description": "Its decadal mass class, e.g. '10 g-100 g'.",
+          "type": "string"
+        },
+        "areas": {
+          "description": "Its areas, by probability.",
+          "items": {
+            "$ref": "#/$defs/ProbabilityEllipse"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "blip_id",
+        "mass_class",
+        "areas"
+      ],
+      "title": "BlipAreas",
       "type": "object"
     },
     "BlipResult": {
@@ -824,6 +852,65 @@
       "title": "Forensics",
       "type": "object"
     },
+    "MassClassErrors": {
+      "additionalProperties": true,
+      "description": "The error table's row for one decadal mass class (1.1; Fenrir D5a draft).",
+      "properties": {
+        "mass_class": {
+          "description": "The decadal mass class, e.g. '10 g-100 g'.",
+          "type": "string"
+        },
+        "blips": {
+          "description": "Blips in the class.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "along_track_sigma_m": {
+          "description": "Median 1-sigma landing error along the direction of travel, m.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "cross_track_sigma_m": {
+          "description": "Median 1-sigma landing error across the direction of travel, m.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "area_50_km2": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Its 50 % region, km^2."
+        },
+        "area_90_km2": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Its 90 % region, km^2."
+        }
+      },
+      "required": [
+        "mass_class",
+        "blips",
+        "along_track_sigma_m",
+        "cross_track_sigma_m"
+      ],
+      "title": "MassClassErrors",
+      "type": "object"
+    },
     "OutputFiles": {
       "additionalProperties": true,
       "description": "The run's output files, as paths relative to the run folder.",
@@ -855,12 +942,76 @@
           ],
           "default": null,
           "description": "The legacy-layout results file (Phase 1)."
+        },
+        "uncertainty_kmz": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The probability areas for Google Earth (1.1)."
+        },
+        "areas_geojson": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The probability areas (1.1)."
         }
       },
       "required": [
         "full_kmz"
       ],
       "title": "OutputFiles",
+      "type": "object"
+    },
+    "ParameterUncertainty": {
+      "additionalProperties": true,
+      "description": "One fitted parameter's uncertainty (1.1).",
+      "properties": {
+        "name": {
+          "description": "UTM easting (m), UTM northing (m), terminus height above sea level (m), azimuth (deg), declination (deg), density (kg/m^3) or speed (m/s).",
+          "enum": [
+            "utm_e",
+            "utm_n",
+            "alt",
+            "az",
+            "dec",
+            "rho",
+            "v0"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "description": "The fitted value, in the name's unit.",
+          "type": "number"
+        },
+        "sigma": {
+          "description": "Its 1-sigma uncertainty, in the name's unit.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "capped_at_search_range": {
+          "description": "True when the blips do not constrain it and sigma is the search half-range.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "sigma",
+        "capped_at_search_range"
+      ],
+      "title": "ParameterUncertainty",
       "type": "object"
     },
     "PowerLawFit": {
@@ -903,6 +1054,105 @@
         "n_points"
       ],
       "title": "PowerLawFit",
+      "type": "object"
+    },
+    "ProbabilityEllipse": {
+      "additionalProperties": true,
+      "description": "An area holding a probability of a blip's fragment landing (1.1).",
+      "properties": {
+        "probability": {
+          "description": "The probability it holds, 0-1.",
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "lat": {
+          "description": "Centre latitude, degrees north.",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Centre longitude, degrees east.",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "semi_major_m": {
+          "description": "Semi-major axis, m.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "semi_minor_m": {
+          "description": "Semi-minor axis, m.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "major_azimuth_deg": {
+          "description": "The major axis's direction, degrees clockwise from true north.",
+          "exclusiveMaximum": 180.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "probability",
+        "lat",
+        "lon",
+        "semi_major_m",
+        "semi_minor_m",
+        "major_azimuth_deg"
+      ],
+      "title": "ProbabilityEllipse",
+      "type": "object"
+    },
+    "ProbabilityRegion": {
+      "additionalProperties": true,
+      "description": "A highest-density region holding a probability, for a mass class or the fall (1.1).",
+      "properties": {
+        "mass_class": {
+          "description": "The decadal mass class, or 'fall' for all blips.",
+          "type": "string"
+        },
+        "probability": {
+          "description": "The probability it holds, 0-1.",
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "area_km2": {
+          "description": "Its area, km^2.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "outlines": {
+          "description": "Its outlines, each a list of (latitude, longitude) points, degrees.",
+          "items": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "mass_class",
+        "probability",
+        "area_km2",
+        "outlines"
+      ],
+      "title": "ProbabilityRegion",
       "type": "object"
     },
     "RadarSweep": {
@@ -1332,6 +1582,36 @@
           ],
           "default": null,
           "description": "As sobol_first_order_conf, for sobol_total."
+        },
+        "cost": {
+          "anyOf": [
+            {
+              "enum": [
+                "legacy",
+                "direct",
+                "weighted"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The search's cost (1.1): 'legacy' (the spline cost), 'direct' (each blip's nearest mass solved, optionally with blip times) or 'weighted' (in units of each blip's uncertainty). Absent: legacy."
+        },
+        "blips_behind_terminus": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Blips lying behind the fitted terminus's direction of travel, horizontally (1.1): reported, not penalized, by the direct and weighted costs."
         }
       },
       "required": [
@@ -1342,6 +1622,61 @@
         "sobol_total"
       ],
       "title": "SearchDiagnostics",
+      "type": "object"
+    },
+    "SearchGrid": {
+      "additionalProperties": true,
+      "description": "Where to search, cell by cell (1.1): the cells of the fall's 90 % region.",
+      "properties": {
+        "cell_m": {
+          "description": "Cell size, m (square, in UTM).",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "cells": {
+          "description": "The cells, most probable first.",
+          "items": {
+            "$ref": "#/$defs/SearchGridCell"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "cell_m",
+        "cells"
+      ],
+      "title": "SearchGrid",
+      "type": "object"
+    },
+    "SearchGridCell": {
+      "additionalProperties": true,
+      "description": "One search-grid cell (1.1).",
+      "properties": {
+        "lat": {
+          "description": "Cell centre latitude, degrees north.",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "type": "number"
+        },
+        "lon": {
+          "description": "Cell centre longitude, degrees east.",
+          "maximum": 180.0,
+          "minimum": -180.0,
+          "type": "number"
+        },
+        "probability": {
+          "description": "The cell's share of the fall's landings, 0-1.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "lat",
+        "lon",
+        "probability"
+      ],
+      "title": "SearchGridCell",
       "type": "object"
     },
     "SearchRange": {
@@ -1460,6 +1795,144 @@
         }
       },
       "title": "SearchRanges",
+      "type": "object"
+    },
+    "Uncertainty": {
+      "additionalProperties": true,
+      "description": "Level 1 probability areas, search grid and error tables (1.1; Fenrir D19, D5a).",
+      "properties": {
+        "method": {
+          "description": "How they were computed.",
+          "type": "string"
+        },
+        "samples": {
+          "description": "Monte Carlo samples.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "area_scale": {
+          "default": 1.0,
+          "description": "The calibration factor applied to the areas' linear size (1: none).",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "fit_quality": {
+          "$ref": "#/$defs/UncertaintyFitQuality"
+        },
+        "parameters": {
+          "items": {
+            "$ref": "#/$defs/ParameterUncertainty"
+          },
+          "type": "array"
+        },
+        "correlations": {
+          "description": "The parameters' correlation matrix, in ``parameters`` order.",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "error_table": {
+          "items": {
+            "$ref": "#/$defs/MassClassErrors"
+          },
+          "type": "array"
+        },
+        "blip_areas": {
+          "items": {
+            "$ref": "#/$defs/BlipAreas"
+          },
+          "type": "array"
+        },
+        "regions": {
+          "items": {
+            "$ref": "#/$defs/ProbabilityRegion"
+          },
+          "type": "array"
+        },
+        "search_grid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SearchGrid"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "sources_included": {
+          "description": "Uncertainty sources sampled.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sources_excluded": {
+          "description": "Known sources not sampled.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "samples",
+        "fit_quality",
+        "parameters",
+        "correlations",
+        "error_table",
+        "blip_areas",
+        "regions",
+        "sources_included",
+        "sources_excluded"
+      ],
+      "title": "Uncertainty",
+      "type": "object"
+    },
+    "UncertaintyFitQuality": {
+      "additionalProperties": true,
+      "description": "How well the fit explains the blips (1.1).",
+      "properties": {
+        "residual_m": {
+          "description": "RMS residual per blip of the fit's cost (with blip times), m-equivalent.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "spatial_residual_m": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "RMS horizontal miss of the blips, m."
+        },
+        "blips": {
+          "description": "Blips reached.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "free_parameters": {
+          "description": "Parameters the search left free.",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "residual_m",
+        "blips",
+        "free_parameters"
+      ],
+      "title": "UncertaintyFitQuality",
       "type": "object"
     },
     "WindLevel": {
@@ -1590,6 +2063,18 @@
     },
     "files": {
       "$ref": "#/$defs/OutputFiles"
+    },
+    "uncertainty": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Uncertainty"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Level 1 probability areas (1.1); absent when not computed."
     }
   },
   "required": [

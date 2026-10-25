@@ -14,6 +14,10 @@ mass is in **kilograms** (displays show grams below 1000 g).
 Version history:
 
 - **1.0** (2026-10-15): first version (H-003, with Fenrir F-011b).
+- **1.1** (2026-10-25): the optional ``uncertainty`` section (Level 1
+  probability areas, search grid, error tables; H-004, with Fenrir F-025b),
+  the search's ``cost`` and ``blips_behind_terminus``, and the
+  uncertainty output files.
 """
 
 from __future__ import annotations
@@ -25,7 +29,7 @@ from pydantic import Field, field_validator
 from hel._base import HelModel, UtcDatetime, check_contract_version
 
 CONTRACT = "hel.results"
-CONTRACT_VERSION = "1.0"
+CONTRACT_VERSION = "1.1"
 SUPPORTED_MAJOR = 1
 
 AnalysisMode = Literal[
@@ -201,6 +205,22 @@ class SearchDiagnostics(HelModel):
     )
     sobol_total_conf: list[float] | None = Field(
         default=None, description="As sobol_first_order_conf, for sobol_total."
+    )
+    cost: Literal["legacy", "direct", "weighted"] | None = Field(
+        default=None,
+        description=(
+            "The search's cost (1.1): 'legacy' (the spline cost), 'direct' (each blip's "
+            "nearest mass solved, optionally with blip times) or 'weighted' (in units of "
+            "each blip's uncertainty). Absent: legacy."
+        ),
+    )
+    blips_behind_terminus: int | None = Field(
+        default=None,
+        ge=0,
+        description=(
+            "Blips lying behind the fitted terminus's direction of travel, horizontally "
+            "(1.1): reported, not penalized, by the direct and weighted costs."
+        ),
     )
 
 
@@ -470,6 +490,125 @@ class ScatteringModel(HelModel):
     k2_water: float = Field(gt=0.0, description="Dielectric factor |K|^2 of water.")
 
 
+class ProbabilityEllipse(HelModel):
+    """An area holding a probability of a blip's fragment landing (1.1)."""
+
+    probability: float = Field(gt=0.0, lt=1.0, description="The probability it holds, 0-1.")
+    lat: float = Field(ge=-90.0, le=90.0, description="Centre latitude, degrees north.")
+    lon: float = Field(ge=-180.0, le=180.0, description="Centre longitude, degrees east.")
+    semi_major_m: float = Field(ge=0.0, description="Semi-major axis, m.")
+    semi_minor_m: float = Field(ge=0.0, description="Semi-minor axis, m.")
+    major_azimuth_deg: float = Field(
+        ge=0.0,
+        lt=180.0,
+        description="The major axis's direction, degrees clockwise from true north.",
+    )
+
+
+class BlipAreas(HelModel):
+    """One blip's landing areas (1.1)."""
+
+    blip_id: str = Field(description="The blip, as in ``blips``.")
+    mass_class: str = Field(description="Its decadal mass class, e.g. '10 g-100 g'.")
+    areas: list[ProbabilityEllipse] = Field(description="Its areas, by probability.")
+
+
+class ProbabilityRegion(HelModel):
+    """A highest-density region holding a probability, for a mass class or the fall (1.1)."""
+
+    mass_class: str = Field(description="The decadal mass class, or 'fall' for all blips.")
+    probability: float = Field(gt=0.0, lt=1.0, description="The probability it holds, 0-1.")
+    area_km2: float = Field(ge=0.0, description="Its area, km^2.")
+    outlines: list[list[tuple[float, float]]] = Field(
+        description="Its outlines, each a list of (latitude, longitude) points, degrees."
+    )
+
+
+class SearchGridCell(HelModel):
+    """One search-grid cell (1.1)."""
+
+    lat: float = Field(ge=-90.0, le=90.0, description="Cell centre latitude, degrees north.")
+    lon: float = Field(ge=-180.0, le=180.0, description="Cell centre longitude, degrees east.")
+    probability: float = Field(
+        ge=0.0, le=1.0, description="The cell's share of the fall's landings, 0-1."
+    )
+
+
+class SearchGrid(HelModel):
+    """Where to search, cell by cell (1.1): the cells of the fall's 90 % region."""
+
+    cell_m: float = Field(gt=0.0, description="Cell size, m (square, in UTM).")
+    cells: list[SearchGridCell] = Field(description="The cells, most probable first.")
+
+
+class ParameterUncertainty(HelModel):
+    """One fitted parameter's uncertainty (1.1)."""
+
+    name: Literal["utm_e", "utm_n", "alt", "az", "dec", "rho", "v0"] = Field(
+        description=(
+            "UTM easting (m), UTM northing (m), terminus height above sea level (m), "
+            "azimuth (deg), declination (deg), density (kg/m^3) or speed (m/s)."
+        )
+    )
+    value: float = Field(description="The fitted value, in the name's unit.")
+    sigma: float = Field(ge=0.0, description="Its 1-sigma uncertainty, in the name's unit.")
+    capped_at_search_range: bool = Field(
+        description="True when the blips do not constrain it and sigma is the search half-range."
+    )
+
+
+class MassClassErrors(HelModel):
+    """The error table's row for one decadal mass class (1.1; Fenrir D5a draft)."""
+
+    mass_class: str = Field(description="The decadal mass class, e.g. '10 g-100 g'.")
+    blips: int = Field(ge=0, description="Blips in the class.")
+    along_track_sigma_m: float = Field(
+        ge=0.0, description="Median 1-sigma landing error along the direction of travel, m."
+    )
+    cross_track_sigma_m: float = Field(
+        ge=0.0, description="Median 1-sigma landing error across the direction of travel, m."
+    )
+    area_50_km2: float | None = Field(default=None, ge=0.0, description="Its 50 % region, km^2.")
+    area_90_km2: float | None = Field(default=None, ge=0.0, description="Its 90 % region, km^2.")
+
+
+class UncertaintyFitQuality(HelModel):
+    """How well the fit explains the blips (1.1)."""
+
+    residual_m: float = Field(
+        ge=0.0,
+        description="RMS residual per blip of the fit's cost (with blip times), m-equivalent.",
+    )
+    spatial_residual_m: float | None = Field(
+        default=None, ge=0.0, description="RMS horizontal miss of the blips, m."
+    )
+    blips: int = Field(ge=0, description="Blips reached.")
+    free_parameters: int = Field(ge=0, description="Parameters the search left free.")
+
+
+class Uncertainty(HelModel):
+    """Level 1 probability areas, search grid and error tables (1.1; Fenrir D19, D5a)."""
+
+    method: str = Field(description="How they were computed.")
+    samples: int = Field(ge=1, description="Monte Carlo samples.")
+    area_scale: float = Field(
+        default=1.0,
+        gt=0.0,
+        description="The calibration factor applied to the areas' linear size (1: none).",
+    )
+    fit_quality: UncertaintyFitQuality
+    parameters: list[ParameterUncertainty]
+    correlations: list[list[float]] = Field(
+        description="The parameters' correlation matrix, in ``parameters`` order."
+    )
+    error_table: list[MassClassErrors]
+    blip_areas: list[BlipAreas]
+    regions: list[ProbabilityRegion]
+    search_grid: SearchGrid | None = None
+    sources_included: list[str] = Field(description="Uncertainty sources sampled.")
+    sources_excluded: list[str] = Field(description="Known sources not sampled.")
+
+
 class OutputFiles(HelModel):
     """The run's output files, as paths relative to the run folder."""
 
@@ -480,6 +619,10 @@ class OutputFiles(HelModel):
     legacy_results: str | None = Field(
         default=None, description="The legacy-layout results file (Phase 1)."
     )
+    uncertainty_kmz: str | None = Field(
+        default=None, description="The probability areas for Google Earth (1.1)."
+    )
+    areas_geojson: str | None = Field(default=None, description="The probability areas (1.1).")
 
 
 class ResultsDocument(HelModel):
@@ -506,6 +649,9 @@ class ResultsDocument(HelModel):
     )
     scattering_model: ScatteringModel
     files: OutputFiles
+    uncertainty: Uncertainty | None = Field(
+        default=None, description="Level 1 probability areas (1.1); absent when not computed."
+    )
 
     @field_validator("contract_version")
     @classmethod

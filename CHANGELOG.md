@@ -3,6 +3,20 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.4.0 (2026-10-25)
+
+Contracts: `hel.results` 1.1 (`hel.event` 1.0, `hel.radar` 1.1, `hel.seismo`
+1.1 unchanged).
+
+### Added
+
+- `hel.results` 1.1 (H-004, with Fenrir F-025b): the optional `uncertainty`
+  section (Level 1 probability areas per blip, per decadal mass class and
+  for the fall; the search grid; parameter uncertainties and correlations;
+  the error table; fit quality; the sources included and excluded), the
+  search's `cost` and `blips_behind_terminus`, and the `uncertainty_kmz`
+  and `areas_geojson` output files.
+
 ## 1.3.0 (2026-10-19)
 
 Contracts: unchanged (`hel.event` 1.0, `hel.radar` 1.1, `hel.seismo` 1.1,
