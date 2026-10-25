@@ -12,6 +12,9 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Done
 
+- `H-005` The wind's share in the results contract, `hel.results` 1.2
+  (released in v1.5.0; Fenrir F-026a writes it).
+  Archive: [H-005](specs/done/H-005-results-wind-uncertainty.md)
 - `H-004` Probability areas in the results contract, `hel.results` 1.1
   (released in v1.4.2; Fenrir F-025b writes them).
   Archive: [H-004](specs/done/H-004-results-uncertainty.md)

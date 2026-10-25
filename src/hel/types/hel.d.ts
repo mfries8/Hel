@@ -1387,6 +1387,10 @@ export interface Uncertainty {
   regions: ProbabilityRegion[];
   search_grid?: SearchGrid | null;
   /**
+   * The wind ensemble (1.2); absent when the wind was not sampled.
+   */
+  wind?: WindUncertainty | null;
+  /**
    * Uncertainty sources sampled.
    */
   sources_included: string[];
@@ -1468,6 +1472,10 @@ export interface MassClassErrors {
    * Its 90 % region, km^2.
    */
   area_90_km2?: number | null;
+  /**
+   * The share of the class's landing variance from the wind (1.2): the spread between the wind ensemble's members over the total, median of its blips.
+   */
+  wind_share?: number | null;
   [k: string]: unknown;
 }
 /**
@@ -1570,6 +1578,47 @@ export interface SearchGridCell {
    * The cell's share of the fall's landings, 0-1.
    */
   probability: number;
+  [k: string]: unknown;
+}
+/**
+ * How the wind entered the uncertainty (1.2; Fenrir D20).
+ */
+export interface WindUncertainty {
+  /**
+   * The wind samples' source, e.g. 'ERA5 ensemble'.
+   */
+  source: string;
+  /**
+   * Members sampled.
+   */
+  members: number;
+  /**
+   * True when the fit was re-run for each member.
+   */
+  refit: boolean;
+  member_fits?: MemberFit[];
+  [k: string]: unknown;
+}
+/**
+ * One wind ensemble member's re-fit (1.2).
+ */
+export interface MemberFit {
+  /**
+   * The member's number.
+   */
+  member: number;
+  /**
+   * The re-fitted terminus's horizontal distance from the main fit's, m.
+   */
+  shift_m: number;
+  /**
+   * The re-fitted terminus height minus the main fit's, m.
+   */
+  altitude_shift_m: number;
+  /**
+   * The re-fit's cost (None: not re-fitted).
+   */
+  cost?: number | null;
   [k: string]: unknown;
 }
 

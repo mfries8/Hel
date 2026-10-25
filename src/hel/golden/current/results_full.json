@@ -1,6 +1,6 @@
 {
   "contract": "hel.results",
-  "contract_version": "1.1",
+  "contract_version": "1.2",
   "event_id": "PF_2003",
   "run": {
     "run_id": "20261015T120000Z-full_parameter_refinement-example",
@@ -3959,7 +3959,8 @@
         "along_track_sigma_m": 310.0,
         "cross_track_sigma_m": 190.0,
         "area_50_km2": 0.8,
-        "area_90_km2": 2.4
+        "area_90_km2": 2.4,
+        "wind_share": 0.35
       }
     ],
     "blip_areas": [
@@ -4020,6 +4021,25 @@
           "lat": 41.46,
           "lon": -87.73,
           "probability": 0.004
+        }
+      ]
+    },
+    "wind": {
+      "source": "ERA5 ensemble",
+      "members": 10,
+      "refit": true,
+      "member_fits": [
+        {
+          "member": 0,
+          "shift_m": 62.0,
+          "altitude_shift_m": -40.0,
+          "cost": 360000.0
+        },
+        {
+          "member": 1,
+          "shift_m": 75.0,
+          "altitude_shift_m": -57.0,
+          "cost": 370000.0
         }
       ]
     },

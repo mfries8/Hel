@@ -3,6 +3,18 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.5.0 (2026-10-25)
+
+Contracts: `hel.results` 1.2 (`hel.event` 1.0, `hel.radar` 1.1, `hel.seismo`
+1.1 unchanged).
+
+### Added
+
+- `hel.results` 1.2 (H-005, with Fenrir F-026a): the wind's share of each
+  mass class's landing error (`uncertainty.error_table[].wind_share`) and
+  the wind ensemble's record (`uncertainty.wind`: the members, whether the
+  fit was re-run in each, and each re-fit's shift and cost).
+
 ## 1.4.2 (2026-10-25)
 
 Contracts: as 1.4.0 (`hel.results` 1.1); the files are unchanged.

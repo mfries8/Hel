@@ -18,6 +18,10 @@ Version history:
   probability areas, search grid, error tables; H-004, with Fenrir F-025b),
   the search's ``cost`` and ``blips_behind_terminus``, and the
   uncertainty output files.
+- **1.2** (2026-10-25): the wind's share of each mass class's landing error
+  (``error_table[].wind_share``) and the wind ensemble's record
+  (``uncertainty.wind``: the members and each one's re-fit; H-005, with
+  Fenrir F-026a).
 """
 
 from __future__ import annotations
@@ -29,7 +33,7 @@ from pydantic import Field, field_validator
 from hel._base import HelModel, UtcDatetime, check_contract_version
 
 CONTRACT = "hel.results"
-CONTRACT_VERSION = "1.1"
+CONTRACT_VERSION = "1.2"
 SUPPORTED_MAJOR = 1
 
 AnalysisMode = Literal[
@@ -573,6 +577,37 @@ class MassClassErrors(HelModel):
     )
     area_50_km2: float | None = Field(default=None, ge=0.0, description="Its 50 % region, km^2.")
     area_90_km2: float | None = Field(default=None, ge=0.0, description="Its 90 % region, km^2.")
+    wind_share: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "The share of the class's landing variance from the wind (1.2): the spread "
+            "between the wind ensemble's members over the total, median of its blips."
+        ),
+    )
+
+
+class MemberFit(HelModel):
+    """One wind ensemble member's re-fit (1.2)."""
+
+    member: int = Field(ge=0, description="The member's number.")
+    shift_m: float = Field(
+        ge=0.0, description="The re-fitted terminus's horizontal distance from the main fit's, m."
+    )
+    altitude_shift_m: float = Field(
+        description="The re-fitted terminus height minus the main fit's, m."
+    )
+    cost: float | None = Field(default=None, description="The re-fit's cost (None: not re-fitted).")
+
+
+class WindUncertainty(HelModel):
+    """How the wind entered the uncertainty (1.2; Fenrir D20)."""
+
+    source: str = Field(description="The wind samples' source, e.g. 'ERA5 ensemble'.")
+    members: int = Field(ge=1, description="Members sampled.")
+    refit: bool = Field(description="True when the fit was re-run for each member.")
+    member_fits: list[MemberFit] = Field(default_factory=list)
 
 
 class UncertaintyFitQuality(HelModel):
@@ -608,6 +643,9 @@ class Uncertainty(HelModel):
     blip_areas: list[BlipAreas]
     regions: list[ProbabilityRegion]
     search_grid: SearchGrid | None = None
+    wind: WindUncertainty | None = Field(
+        default=None, description="The wind ensemble (1.2); absent when the wind was not sampled."
+    )
     sources_included: list[str] = Field(description="Uncertainty sources sampled.")
     sources_excluded: list[str] = Field(description="Known sources not sampled.")
 

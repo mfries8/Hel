@@ -260,7 +260,7 @@ def test_results_require_the_fitted_terminus() -> None:
 
 
 def test_results_version_is_registered() -> None:
-    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.1"
+    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.2"
 
 
 def test_results_uncertainty_section() -> None:
@@ -274,6 +274,20 @@ def test_results_uncertainty_section() -> None:
     assert document.search is not None and document.search.cost == "direct"
     minimal, _ = hel.validate(_golden("current", "results_minimal.json"))
     assert isinstance(minimal, ResultsDocument) and minimal.uncertainty is None
+
+
+def test_results_wind_uncertainty() -> None:
+    # 1.2 (H-005): the wind's share per mass class and the ensemble's re-fits.
+    document, _ = hel.validate(_golden("current", "results_full.json"))
+    assert isinstance(document, ResultsDocument)
+    u = document.uncertainty
+    assert u is not None and u.error_table[0].wind_share == 0.35
+    assert u.wind is not None and u.wind.refit and u.wind.members == 10
+    assert u.wind.member_fits[0].shift_m == 62.0
+    bad = _golden("current", "results_full.json")
+    bad["uncertainty"]["error_table"][0]["wind_share"] = 1.5
+    with pytest.raises(ContractValidationError, match="wind_share"):
+        hel.validate(bad)
 
 
 def test_results_full_example_validates() -> None:

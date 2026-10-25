@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "hel.results/1.1",
+  "$id": "hel.results/1.2",
   "title": "ResultsDocument",
   "$defs": {
     "AnalysisInputs": {
@@ -900,6 +900,20 @@
           ],
           "default": null,
           "description": "Its 90 % region, km^2."
+        },
+        "wind_share": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The share of the class's landing variance from the wind (1.2): the spread between the wind ensemble's members over the total, median of its blips."
         }
       },
       "required": [
@@ -909,6 +923,45 @@
         "cross_track_sigma_m"
       ],
       "title": "MassClassErrors",
+      "type": "object"
+    },
+    "MemberFit": {
+      "additionalProperties": true,
+      "description": "One wind ensemble member's re-fit (1.2).",
+      "properties": {
+        "member": {
+          "description": "The member's number.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "shift_m": {
+          "description": "The re-fitted terminus's horizontal distance from the main fit's, m.",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "altitude_shift_m": {
+          "description": "The re-fitted terminus height minus the main fit's, m.",
+          "type": "number"
+        },
+        "cost": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The re-fit's cost (None: not re-fitted)."
+        }
+      },
+      "required": [
+        "member",
+        "shift_m",
+        "altitude_shift_m"
+      ],
+      "title": "MemberFit",
       "type": "object"
     },
     "OutputFiles": {
@@ -1857,6 +1910,18 @@
           ],
           "default": null
         },
+        "wind": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WindUncertainty"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The wind ensemble (1.2); absent when the wind was not sampled."
+        },
         "sources_included": {
           "description": "Uncertainty sources sampled.",
           "items": {
@@ -1964,6 +2029,38 @@
         "direction_from_deg"
       ],
       "title": "WindLevel",
+      "type": "object"
+    },
+    "WindUncertainty": {
+      "additionalProperties": true,
+      "description": "How the wind entered the uncertainty (1.2; Fenrir D20).",
+      "properties": {
+        "source": {
+          "description": "The wind samples' source, e.g. 'ERA5 ensemble'.",
+          "type": "string"
+        },
+        "members": {
+          "description": "Members sampled.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "refit": {
+          "description": "True when the fit was re-run for each member.",
+          "type": "boolean"
+        },
+        "member_fits": {
+          "items": {
+            "$ref": "#/$defs/MemberFit"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "members",
+        "refit"
+      ],
+      "title": "WindUncertainty",
       "type": "object"
     }
   },
