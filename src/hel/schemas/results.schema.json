@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "hel.results/1.2",
+  "$id": "hel.results/1.3",
   "title": "ResultsDocument",
   "$defs": {
     "AnalysisInputs": {
@@ -564,6 +564,51 @@
         "radar_diversity_factor"
       ],
       "title": "Confidence",
+      "type": "object"
+    },
+    "ExcludedSignature": {
+      "additionalProperties": true,
+      "description": "A radar signature the analyst unticked, which the run did not use (1.3).",
+      "properties": {
+        "blip_id": {
+          "description": "The signature's id, as the blips' ids.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "radar_name": {
+          "description": "Radar station identifier.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "sweep_number": {
+          "description": "1-based sweep number.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "reason": {
+          "description": "The ``hel.radar`` exclusion reason.",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The analyst's note."
+        }
+      },
+      "required": [
+        "blip_id",
+        "radar_name",
+        "sweep_number",
+        "reason"
+      ],
+      "title": "ExcludedSignature",
       "type": "object"
     },
     "FittedTerminus": {
@@ -2165,6 +2210,21 @@
       ],
       "default": null,
       "description": "Level 1 probability areas (1.1); absent when not computed."
+    },
+    "excluded": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/ExcludedSignature"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Unticked radar signatures, not used (1.3)."
     }
   },
   "required": [

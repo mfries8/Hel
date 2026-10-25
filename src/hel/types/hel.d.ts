@@ -334,6 +334,10 @@ export interface Sweep {
    * Legacy record of pixels removed from the selection.
    */
   deselected_pixels?: unknown[] | null;
+  /**
+   * Unticked by the analyst (1.2): used in no calculation.
+   */
+  exclusion?: Exclusion | null;
   [k: string]: unknown;
 }
 /**
@@ -526,6 +530,31 @@ export interface PixelQuality {
   [k: string]: unknown;
 }
 /**
+ * Why an analyst unticked a sweep or blip (1.2).
+ *
+ * An excluded signature stays in the file (the archive) and is used in no
+ * calculation, in any app, until the exclusion is removed.
+ */
+export interface Exclusion {
+  /**
+   * 'bright_flight' (the fireball itself, before its meteorites size-sort), 'uncertain' (it may be noise rather than a meteorite signature), 'artifact', 'not_this_fall' or 'other'.
+   */
+  reason: "bright_flight" | "uncertain" | "artifact" | "not_this_fall" | "other";
+  /**
+   * The analyst's note.
+   */
+  note?: string | null;
+  /**
+   * The app that recorded it, e.g. 'Fenrir'.
+   */
+  by: string;
+  /**
+   * When it was recorded (UTC).
+   */
+  at: string;
+  [k: string]: unknown;
+}
+/**
  * A group of pixels treated as one detection (Gjallerhorn G14).
  */
 export interface Blip {
@@ -572,6 +601,10 @@ export interface Blip {
    */
   centroid_weighting?: "reflectivity" | "equal";
   uncertainty?: BlipUncertainty | null;
+  /**
+   * Unticked by the analyst (1.2): used in no calculation.
+   */
+  exclusion?: Exclusion | null;
   [k: string]: unknown;
 }
 /**
@@ -638,6 +671,10 @@ export interface ResultsDocument {
    * Level 1 probability areas (1.1); absent when not computed.
    */
   uncertainty?: Uncertainty | null;
+  /**
+   * Unticked radar signatures, not used (1.3).
+   */
+  excluded?: ExcludedSignature[] | null;
   [k: string]: unknown;
 }
 /**
@@ -1619,6 +1656,32 @@ export interface MemberFit {
    * The re-fit's cost (None: not re-fitted).
    */
   cost?: number | null;
+  [k: string]: unknown;
+}
+/**
+ * A radar signature the analyst unticked, which the run did not use (1.3).
+ */
+export interface ExcludedSignature {
+  /**
+   * The signature's id, as the blips' ids.
+   */
+  blip_id: string;
+  /**
+   * Radar station identifier.
+   */
+  radar_name: string;
+  /**
+   * 1-based sweep number.
+   */
+  sweep_number: number;
+  /**
+   * The ``hel.radar`` exclusion reason.
+   */
+  reason: string;
+  /**
+   * The analyst's note.
+   */
+  note?: string | null;
   [k: string]: unknown;
 }
 

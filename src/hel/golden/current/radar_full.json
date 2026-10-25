@@ -1,6 +1,6 @@
 {
   "contract": "hel.radar",
-  "contract_version": "1.1",
+  "contract_version": "1.2",
   "file_name": "RADAR_Example",
   "producer": {"name": "Gjallerhorn", "version": "1.0.0"},
   "sweeps": [
@@ -86,13 +86,27 @@
       "radar_name": "KBMX",
       "sweep_number": 2,
       "volume_scan_start_time": "2023-01-01T00:00:21.5Z",
-      "pixel_indices": [0, 1],
+      "pixel_indices": [
+        0,
+        1
+      ],
       "lat": 33.5004,
       "lon": -86.4996,
       "altitude_m": 4502.0,
       "time_utc": "2023-01-01T00:00:31.25Z",
       "centroid_weighting": "reflectivity",
-      "uncertainty": {"semi_major_m": 410.0, "semi_minor_m": 180.0, "azimuth_deg": 124.25, "altitude_sigma_m": 360.0}
+      "uncertainty": {
+        "semi_major_m": 410.0,
+        "semi_minor_m": 180.0,
+        "azimuth_deg": 124.25,
+        "altitude_sigma_m": 360.0
+      },
+      "exclusion": {
+        "reason": "bright_flight",
+        "note": "Above the terminus: the fireball itself.",
+        "by": "Gjallerhorn",
+        "at": "2026-10-25T12:00:00Z"
+      }
     }
   ]
 }

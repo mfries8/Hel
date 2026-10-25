@@ -1,6 +1,6 @@
 {
   "contract": "hel.radar",
-  "contract_version": "1.1",
+  "contract_version": "1.2",
   "sweeps": [
     {
       "radar_name": "KHNX",

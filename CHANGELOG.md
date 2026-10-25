@@ -3,6 +3,19 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.6.0 (2026-10-25)
+
+Contracts: `hel.radar` 1.2, `hel.results` 1.3 (`hel.event` 1.0,
+`hel.seismo` 1.1 unchanged).
+
+### Added
+
+- `hel.radar` 1.2 (H-006, with Fenrir F-027): an optional `exclusion` on a
+  sweep or blip the analyst unticked (reason, note, app, time), kept in the
+  file and left out of every calculation; `hel.radar.excluded_sweeps` is
+  the rule every reader applies.
+- `hel.results` 1.3: `excluded`, the unticked signatures a run did not use.
+
 ## 1.5.0 (2026-10-25)
 
 Contracts: `hel.results` 1.2 (`hel.event` 1.0, `hel.radar` 1.1, `hel.seismo`

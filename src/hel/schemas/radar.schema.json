@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "hel.radar/1.1",
+  "$id": "hel.radar/1.2",
   "title": "RadarDocument",
   "$defs": {
     "Blip": {
@@ -83,6 +83,18 @@
             }
           ],
           "default": null
+        },
+        "exclusion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Exclusion"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unticked by the analyst (1.2): used in no calculation."
         }
       },
       "required": [
@@ -131,6 +143,52 @@
         "altitude_sigma_m"
       ],
       "title": "BlipUncertainty",
+      "type": "object"
+    },
+    "Exclusion": {
+      "additionalProperties": true,
+      "description": "Why an analyst unticked a sweep or blip (1.2).\n\nAn excluded signature stays in the file (the archive) and is used in no\ncalculation, in any app, until the exclusion is removed.",
+      "properties": {
+        "reason": {
+          "description": "'bright_flight' (the fireball itself, before its meteorites size-sort), 'uncertain' (it may be noise rather than a meteorite signature), 'artifact', 'not_this_fall' or 'other'.",
+          "enum": [
+            "bright_flight",
+            "uncertain",
+            "artifact",
+            "not_this_fall",
+            "other"
+          ],
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The analyst's note."
+        },
+        "by": {
+          "description": "The app that recorded it, e.g. 'Fenrir'.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "at": {
+          "description": "When it was recorded (UTC).",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason",
+        "by",
+        "at"
+      ],
+      "title": "Exclusion",
       "type": "object"
     },
     "Pixel": {
@@ -1011,6 +1069,18 @@
           ],
           "default": null,
           "description": "Legacy record of pixels removed from the selection."
+        },
+        "exclusion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Exclusion"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unticked by the analyst (1.2): used in no calculation."
         }
       },
       "required": [

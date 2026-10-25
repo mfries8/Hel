@@ -12,6 +12,9 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Done
 
+- `H-006` Unticked signatures in the radar contract, `hel.radar` 1.2
+  (released in v1.6.0; Fenrir F-027 writes them).
+  Archive: [H-006](specs/done/H-006-radar-exclusions.md)
 - `H-005` The wind's share in the results contract, `hel.results` 1.2
   (released in v1.5.0; Fenrir F-026a writes it).
   Archive: [H-005](specs/done/H-005-results-wind-uncertainty.md)

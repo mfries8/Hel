@@ -24,6 +24,10 @@ Version history:
 - **1.1** (2026-10-06): optional pixel fields ``velocity_time`` and
   ``dual_pol_time`` (the oldest exports timed each product group
   separately) and ``sweep_elevation`` (a per-pixel copy some exports carry).
+- **1.2** (2026-10-25): optional ``exclusion`` on a sweep and on a blip
+  (H-006, with Fenrir F-027): a signature the analyst unticked, kept in
+  the file for the archive and left out of every calculation until it is
+  ticked again. The rule every reader follows is ``excluded_sweeps``.
 """
 
 from __future__ import annotations
@@ -35,7 +39,7 @@ from pydantic import Field, field_validator
 from hel._base import HelModel, UtcDatetime, check_contract_version
 
 CONTRACT = "hel.radar"
-CONTRACT_VERSION = "1.1"
+CONTRACT_VERSION = "1.2"
 SUPPORTED_MAJOR = 1
 
 # Canonical radar product names and their units. Every network's product is
@@ -200,6 +204,28 @@ class Pixel(HelModel):
     quality: PixelQuality | None = None
 
 
+ExclusionReason = Literal["bright_flight", "uncertain", "artifact", "not_this_fall", "other"]
+
+
+class Exclusion(HelModel):
+    """Why an analyst unticked a sweep or blip (1.2).
+
+    An excluded signature stays in the file (the archive) and is used in no
+    calculation, in any app, until the exclusion is removed.
+    """
+
+    reason: ExclusionReason = Field(
+        description=(
+            "'bright_flight' (the fireball itself, before its meteorites size-sort), "
+            "'uncertain' (it may be noise rather than a meteorite signature), 'artifact', "
+            "'not_this_fall' or 'other'."
+        )
+    )
+    note: str | None = Field(default=None, description="The analyst's note.")
+    by: str = Field(min_length=1, description="The app that recorded it, e.g. 'Fenrir'.")
+    at: UtcDatetime = Field(description="When it was recorded (UTC).")
+
+
 class Sweep(HelModel):
     """One radar sweep (one elevation scan) and its selected pixels."""
 
@@ -283,6 +309,9 @@ class Sweep(HelModel):
     deselected_pixels: list[object] | None = Field(
         default=None, description="Legacy record of pixels removed from the selection."
     )
+    exclusion: Exclusion | None = Field(
+        default=None, description="Unticked by the analyst (1.2): used in no calculation."
+    )
 
 
 class BlipUncertainty(HelModel):
@@ -319,6 +348,9 @@ class Blip(HelModel):
         description="How member pixels are weighted in the centroid (linear Z for 'reflectivity').",
     )
     uncertainty: BlipUncertainty | None = None
+    exclusion: Exclusion | None = Field(
+        default=None, description="Unticked by the analyst (1.2): used in no calculation."
+    )
 
 
 class Producer(HelModel):
@@ -342,3 +374,26 @@ class RadarDocument(HelModel):
     @classmethod
     def _version(cls, value: str) -> str:
         return check_contract_version(CONTRACT, value, SUPPORTED_MAJOR)
+
+
+def excluded_sweeps(document: RadarDocument) -> set[int]:
+    """The sweeps no calculation may use (1.2): the reader rule.
+
+    A sweep is excluded when it has an ``exclusion``, or when it has blips
+    and every one of them has one.
+
+    Args:
+        document: The radar file.
+
+    Returns:
+        The 0-based indices into ``document.sweeps``.
+    """
+    out = {i for i, sweep in enumerate(document.sweeps) if sweep.exclusion is not None}
+    by_sweep: dict[tuple[str, int], list[Blip]] = {}
+    for blip in document.blips or []:
+        by_sweep.setdefault((blip.radar_name, blip.sweep_number), []).append(blip)
+    for i, sweep in enumerate(document.sweeps):
+        blips = by_sweep.get((sweep.radar_name, sweep.sweep_number), [])
+        if blips and all(b.exclusion is not None for b in blips):
+            out.add(i)
+    return out

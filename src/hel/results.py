@@ -22,6 +22,9 @@ Version history:
   (``error_table[].wind_share``) and the wind ensemble's record
   (``uncertainty.wind``: the members and each one's re-fit; H-005, with
   Fenrir F-026a).
+- **1.3** (2026-10-25): ``excluded``, the radar signatures the analyst
+  unticked (``hel.radar`` 1.2 exclusions), which the run did not use
+  (H-006, with Fenrir F-027).
 """
 
 from __future__ import annotations
@@ -33,7 +36,7 @@ from pydantic import Field, field_validator
 from hel._base import HelModel, UtcDatetime, check_contract_version
 
 CONTRACT = "hel.results"
-CONTRACT_VERSION = "1.2"
+CONTRACT_VERSION = "1.3"
 SUPPORTED_MAJOR = 1
 
 AnalysisMode = Literal[
@@ -267,6 +270,16 @@ class ReverseDiagnostic(HelModel):
     time_s: float | None = Field(
         default=None, description="Flight time from the terminus to the blip's altitude, s."
     )
+
+
+class ExcludedSignature(HelModel):
+    """A radar signature the analyst unticked, which the run did not use (1.3)."""
+
+    blip_id: str = Field(min_length=1, description="The signature's id, as the blips' ids.")
+    radar_name: str = Field(min_length=1, description="Radar station identifier.")
+    sweep_number: int = Field(ge=1, description="1-based sweep number.")
+    reason: str = Field(description="The ``hel.radar`` exclusion reason.")
+    note: str | None = Field(default=None, description="The analyst's note.")
 
 
 class BlipResult(HelModel):
@@ -692,6 +705,9 @@ class ResultsDocument(HelModel):
     files: OutputFiles
     uncertainty: Uncertainty | None = Field(
         default=None, description="Level 1 probability areas (1.1); absent when not computed."
+    )
+    excluded: list[ExcludedSignature] | None = Field(
+        default=None, description="Unticked radar signatures, not used (1.3)."
     )
 
     @field_validator("contract_version")

@@ -46,7 +46,7 @@ def test_validate_reports_ok_legacy_and_failures(
 
     out = capsys.readouterr().out
     assert status == 1
-    assert "OK   " in out and "radar_full.json: hel.radar 1.1" in out
+    assert "OK   " in out and "radar_full.json: hel.radar 1.2" in out
     assert "legacy layout 'legacy_oldest'" in out
     assert "unknown field kept: (top level): 'surprise'" in out
     assert out.count("FAIL") == 2

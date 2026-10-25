@@ -14,7 +14,7 @@ import hel
 from hel import ContractValidationError
 from hel._base import check_contract_version
 from hel.event import EventDocument
-from hel.radar import PRODUCT_ALIASES, PRODUCTS, RadarDocument
+from hel.radar import PRODUCT_ALIASES, PRODUCTS, RadarDocument, excluded_sweeps
 from hel.results import ResultsDocument
 from hel.seismo import SeismoDocument
 
@@ -157,6 +157,31 @@ def test_radar_full_carries_metadata_quality_and_blips() -> None:
     assert blip.uncertainty is not None and blip.uncertainty.semi_major_m == 410.0
 
 
+def test_radar_exclusions_and_the_reader_rule() -> None:
+    # 1.2 (H-006): an unticked sweep or blip stays in the file and is used
+    # in no calculation; a sweep whose blips are all excluded counts too.
+    data = _golden("current", "radar_full.json")
+    document, warnings = hel.validate(data)
+    assert isinstance(document, RadarDocument) and warnings == []
+    assert document.blips is not None and document.blips[0].exclusion is not None
+    assert document.blips[0].exclusion.reason == "bright_flight"
+    assert excluded_sweeps(document) == {0}  # its only blip is excluded
+    data["blips"][0].pop("exclusion")
+    document, _ = hel.validate(data)
+    assert isinstance(document, RadarDocument) and excluded_sweeps(document) == set()
+    data["sweeps"][0]["exclusion"] = {
+        "reason": "uncertain", "by": "Fenrir", "at": "2026-10-25T12:00:00Z"
+    }  # fmt: skip
+    document, _ = hel.validate(data)
+    assert isinstance(document, RadarDocument) and excluded_sweeps(document) == {0}
+    data["sweeps"][0]["exclusion"]["reason"] = "boring"
+    with pytest.raises(ContractValidationError, match="reason"):
+        hel.validate(data)
+    # A 1.1 file still validates.
+    old, _ = hel.validate(_golden("current", "radar_minimal.json"))
+    assert isinstance(old, RadarDocument) and excluded_sweeps(old) == set()
+
+
 def test_radar_requires_sweeps_and_pixel_geometry() -> None:
     data = _golden("current", "radar_minimal.json")
     empty = copy.deepcopy(data)
@@ -260,7 +285,7 @@ def test_results_require_the_fitted_terminus() -> None:
 
 
 def test_results_version_is_registered() -> None:
-    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.2"
+    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.3"
 
 
 def test_results_uncertainty_section() -> None:
@@ -274,6 +299,15 @@ def test_results_uncertainty_section() -> None:
     assert document.search is not None and document.search.cost == "direct"
     minimal, _ = hel.validate(_golden("current", "results_minimal.json"))
     assert isinstance(minimal, ResultsDocument) and minimal.uncertainty is None
+
+
+def test_results_list_the_excluded_signatures() -> None:
+    # 1.3 (H-006): the unticked signatures the run did not use.
+    document, _ = hel.validate(_golden("current", "results_full.json"))
+    assert isinstance(document, ResultsDocument) and document.excluded is not None
+    assert document.excluded[0].reason == "bright_flight"
+    minimal, _ = hel.validate(_golden("current", "results_minimal.json"))
+    assert isinstance(minimal, ResultsDocument) and minimal.excluded is None
 
 
 def test_results_wind_uncertainty() -> None:
