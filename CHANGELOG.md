@@ -3,6 +3,17 @@
 All notable changes to Hel. Versions follow `MAJOR.MINOR.PATCH` for the
 package. Each release lists the contract versions it defines.
 
+## 1.7.0 (2026-10-26)
+
+Contracts: `hel.results` 1.4 (`hel.event` 1.0, `hel.radar` 1.2, `hel.seismo`
+1.1 unchanged).
+
+### Added
+
+- `hel.results` 1.4 (H-007, with Fenrir F-029): `uncertainty.fit_quality.
+  approximate`, why the probability areas are approximate (too few blips to
+  measure the fit's error).
+
 ## 1.6.0 (2026-10-25)
 
 Contracts: `hel.radar` 1.2, `hel.results` 1.3 (`hel.event` 1.0,

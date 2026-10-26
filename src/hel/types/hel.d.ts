@@ -1457,6 +1457,10 @@ export interface UncertaintyFitQuality {
    * Parameters the search left free.
    */
   free_parameters: number;
+  /**
+   * Why the areas are approximate (1.4): no more blips than free parameters, so the fit's error could not be measured and a typical one was used; absent when measured.
+   */
+  approximate?: string | null;
   [k: string]: unknown;
 }
 /**

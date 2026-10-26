@@ -1,6 +1,6 @@
 {
   "contract": "hel.results",
-  "contract_version": "1.3",
+  "contract_version": "1.4",
   "event_id": "PF_2003",
   "run": {
     "run_id": "20261015T120000Z-full_parameter_refinement-example",
@@ -3841,7 +3841,8 @@
       "residual_m": 160.0,
       "spatial_residual_m": 140.0,
       "blips": 30,
-      "free_parameters": 5
+      "free_parameters": 5,
+      "approximate": "1 blip and 6 free parameters: the fit's error cannot be measured; the typical error of well-observed falls was used"
     },
     "parameters": [
       {

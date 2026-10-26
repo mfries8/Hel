@@ -25,6 +25,9 @@ Version history:
 - **1.3** (2026-10-25): ``excluded``, the radar signatures the analyst
   unticked (``hel.radar`` 1.2 exclusions), which the run did not use
   (H-006, with Fenrir F-027).
+- **1.4** (2026-10-26): ``uncertainty.fit_quality.approximate``: why the
+  areas are approximate (too few blips to measure the fit's error), or
+  absent (H-007, with Fenrir F-029).
 """
 
 from __future__ import annotations
@@ -36,7 +39,7 @@ from pydantic import Field, field_validator
 from hel._base import HelModel, UtcDatetime, check_contract_version
 
 CONTRACT = "hel.results"
-CONTRACT_VERSION = "1.3"
+CONTRACT_VERSION = "1.4"
 SUPPORTED_MAJOR = 1
 
 AnalysisMode = Literal[
@@ -635,6 +638,14 @@ class UncertaintyFitQuality(HelModel):
     )
     blips: int = Field(ge=0, description="Blips reached.")
     free_parameters: int = Field(ge=0, description="Parameters the search left free.")
+    approximate: str | None = Field(
+        default=None,
+        description=(
+            "Why the areas are approximate (1.4): no more blips than free parameters, so "
+            "the fit's error could not be measured and a typical one was used; absent when "
+            "measured."
+        ),
+    )
 
 
 class Uncertainty(HelModel):

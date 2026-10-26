@@ -285,7 +285,7 @@ def test_results_require_the_fitted_terminus() -> None:
 
 
 def test_results_version_is_registered() -> None:
-    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.3"
+    assert hel.CONTRACT_VERSIONS["hel.results"] == "1.4"
 
 
 def test_results_uncertainty_section() -> None:
@@ -299,6 +299,14 @@ def test_results_uncertainty_section() -> None:
     assert document.search is not None and document.search.cost == "direct"
     minimal, _ = hel.validate(_golden("current", "results_minimal.json"))
     assert isinstance(minimal, ResultsDocument) and minimal.uncertainty is None
+
+
+def test_results_say_when_the_areas_are_approximate() -> None:
+    # 1.4 (H-007): one blip, six free parameters: the error is a typical one.
+    document, _ = hel.validate(_golden("current", "results_full.json"))
+    assert isinstance(document, ResultsDocument) and document.uncertainty is not None
+    note = document.uncertainty.fit_quality.approximate
+    assert note is not None and "typical" in note
 
 
 def test_results_list_the_excluded_signatures() -> None:

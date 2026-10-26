@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "hel.results/1.3",
+  "$id": "hel.results/1.4",
   "title": "ResultsDocument",
   "$defs": {
     "AnalysisInputs": {
@@ -2028,6 +2028,18 @@
           "description": "Parameters the search left free.",
           "minimum": 0,
           "type": "integer"
+        },
+        "approximate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the areas are approximate (1.4): no more blips than free parameters, so the fit's error could not be measured and a typical one was used; absent when measured."
         }
       },
       "required": [

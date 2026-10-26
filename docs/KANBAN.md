@@ -12,6 +12,8 @@ Workflow rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Done
 
+- `H-007` Approximate probability areas, `hel.results` 1.4 (released in
+  v1.7.0; Fenrir F-029). Archive: [H-007](specs/done/H-007-approximate-areas.md)
 - `H-006` Unticked signatures in the radar contract, `hel.radar` 1.2
   (released in v1.6.0; Fenrir F-027 writes them).
   Archive: [H-006](specs/done/H-006-radar-exclusions.md)
